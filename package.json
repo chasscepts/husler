@@ -1,0 +1,25 @@
+{
+  "name": "phaser-game",
+  "version": "1.0.0",
+  "description": "A phaser 3 game",
+  "scripts": {
+    "eslint": "npx eslint .",
+    "stylelint": "npx stylelint \"**/*.scss\"",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "build": "webpack --progress --mode=production",
+    "watch": "webpack --progress --watch",
+    "serve": "webpack serve --mode development --env development --open",
+    "publish": "git subtree push --prefix dist origin gh-pages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chasscepts/phaser-game.git"
+  },
+  "keywords": [],
+  "author": "Obetta Francis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chasscepts/phaser-game/issues"
+  },
+  "homepage": "https://github.com/chasscepts/phaser-game#readme"
+}
