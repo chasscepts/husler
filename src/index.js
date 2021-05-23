@@ -1,3 +1,13 @@
-const root = document.querySelector('#content');
+import './assets/css/style.scss';
+import Phaser from 'phaser';
+import GameScene from './game-scene';
 
-root.textContent = 'Hi Phaser';
+const scene = new GameScene();
+
+let game = new Phaser.Game({
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  parent: document.querySelector('#canvas-container'),
+  scene,
+});
