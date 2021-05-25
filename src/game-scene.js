@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
 import point from './lib/point';
+import randomItemGenerator from './lib/random-item';
+import eventEmitter from './lib/event-emitter';
+import mixin from './lib/mixin';
 import grid from './assets/images/grid.png';
 import wood from './assets/images/wood.png';
 import hero from './assets/images/hero-sm.png';
@@ -9,6 +12,8 @@ import gem2 from './assets/images/gem2.png';
 import gold from './assets/images/gold-coin.png';
 import door from './assets/images/door.png';
 
+const eventRelay = mixin({}, eventEmitter);
+
 const pointsRange = (y, x1, x2) => {
   const rslt = [];
   for (let x = x1; x <= x2; x += 1) {
@@ -17,7 +22,7 @@ const pointsRange = (y, x1, x2) => {
   return rslt;
 };
 
-const freeCell = [
+const freeCells = [
   ...pointsRange(16, 2, 5),
   ...pointsRange(16, 8, 11),
   ...pointsRange(16, 14, 17),
@@ -39,9 +44,7 @@ const freeCell = [
   ...pointsRange(2, 7, 23),
 ];
 
-const silvers = (() => {
-
-})();
+const generator = randomItemGenerator.create(freeCells);
 
 const mid = (a, b) => 32 * (a + (b - a) / 2);
 const s = (a, b) => 2 * (b - a);
@@ -74,6 +77,13 @@ const createStatic = (staticGroup, name, x1, x2, y1, y2) => {
 
 const createGem = (group, name, x, y) => {
   group.create(32 * x, 32 * y, name);
+};
+
+const setupCoins = (group, name, quantity) => {
+  for (let i = 0; i < quantity; i += 1) {
+    const p = generator.next();
+    createGem(group, name, p.x, p.y);
+  }
 };
 
 /**
@@ -128,6 +138,8 @@ const setupLadderSeals = (seals) => {
   sealsLevels.forEach(({ x, y }) => x.forEach((x) => createStatic(seals, 'wood', x, x + 1, y, y + 0.5)));
 };
 
+const checkContact = (a, b, x, y) => a.body.left - b.body.left < x && b.body.top - b.body.top < y;
+
 export default class GameScene extends Phaser.Scene {
   preload = () => {
     this.load.image('grid', grid);
@@ -141,6 +153,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create = () => {
+    this.score = 0;
+    this.silverRemaining = true;
+    this.bronzeRemainig = true;
+
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.add.image(400, 300, 'grid');
@@ -163,10 +179,10 @@ export default class GameScene extends Phaser.Scene {
     setupLadderSeals(ladderSeals);
     setupFloors(platforms);
 
-    createGem(silvers, 'silver', 2, 8);
-    createGem(bronzes, 'bronze', 20, 12);
+    setupCoins(silvers, 'silver', 5);
+    setupCoins(bronzes, 'bronze', 10);
 
-    const gold = golds.create(2 * 32, 2 * 32, 'gold');
+    golds.create(2 * 32, 2 * 32, 'gold');
 
     const player = this.physics.add.sprite(32 * 8, 32 * 2, 'hero');
     // const player = this.physics.add.sprite(100, 520, 'hero');
@@ -208,12 +224,6 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    this.physics.add.overlap(player, golds,
-      (player, gold) => {
-        console.log(player.body.left - gold.body.left);
-      },
-      () => player.body.left - gold.body.left < 32
-        && gold.body.top - player.body.top < 32);
     this.physics.add.collider(player, doors);
     this.physics.add.collider(player, walls);
     this.physics.add.collider(player, ladderSeals);
@@ -234,8 +244,21 @@ export default class GameScene extends Phaser.Scene {
       return false;
     });
 
+    this.physics.add.overlap(
+      player, golds,
+      () => this.collectGold,
+      (player, gold) => checkContact(player, gold, 32, 32),
+    );
+    this.physics.add.overlap(player, silvers, this.collectSilver, null, this);
+    this.physics.add.overlap(player, bronzes, this.collectBronze, null, this);
+
     this.player = player;
-    this.door.disableBody(true);
+    this.silvers = silvers;
+    this.bronzes = bronzes;
+
+    this.board = this.add.text(64, 17.5 * 32, 'Score: 0', {
+      fontSize: '32px', fill: '#0f0',
+    });
   }
 
   update = () => {
@@ -276,7 +299,45 @@ export default class GameScene extends Phaser.Scene {
     this.playerCanClimb = false;
   }
 
-  onGetToLadder = () => {
+  gameOver = () => {
+    eventRelay.emit('game over', { score: this.score });
+  };
 
+  updateScore = (score) => {
+    this.score += score;
+    this.board.setText(`Score: ${this.score}`);
   }
+
+  collectSilver = (player, silver) => {
+    this.updateScore(30);
+    silver.disableBody(true, true);
+
+    if (this.silvers.countActive(true) === 0) {
+      this.silverRemaining = false;
+      if (!this.bronzeRemainig) {
+        this.gameOver();
+      }
+    }
+  }
+
+  collectBronze = (player, bronze) => {
+    this.updateScore(10);
+    bronze.disableBody(true, true);
+
+    if (this.bronzes.countActive(true) === 0) {
+      this.bronzeRemainig = false;
+      if (!this.silverRemaining) {
+        this.gameOver();
+      }
+    }
+  }
+
+  collectGold = () => {
+    this.updateScore(this.score * 50);
+    this.gameOver();
+  };
 }
+
+export {
+  eventRelay,
+};
