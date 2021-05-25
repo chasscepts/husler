@@ -1,18 +1,17 @@
 import Phaser from 'phaser';
-import point from './lib/point';
-import randomItemGenerator from './lib/random-item';
-import eventEmitter from './lib/event-emitter';
-import mixin from './lib/mixin';
-import grid from './assets/images/grid.png';
-import wood from './assets/images/wood.png';
-import hero from './assets/images/hero-sm.png';
-import ladder from './assets/images/ladder.png';
-import gem1 from './assets/images/gem5.png';
-import gem2 from './assets/images/gem2.png';
-import gold from './assets/images/gold-coin.png';
-import door from './assets/images/door.png';
-
-const eventRelay = mixin({}, eventEmitter);
+import point from '../lib/point';
+import randomItemGenerator from '../lib/random-item';
+import eventEmitter from '../lib/event-emitter';
+import mixin from '../lib/mixin';
+import grid from '../assets/images/grid.png';
+import wood from '../assets/images/wood.png';
+import hero from '../assets/images/hero-sm.png';
+import ladder from '../assets/images/ladder.png';
+import gem1 from '../assets/images/gem5.png';
+import gem2 from '../assets/images/gem2.png';
+import gold from '../assets/images/gold-coin.png';
+import door from '../assets/images/door.png';
+import grass from '../assets/images/grass.jpg';
 
 const pointsRange = (y, x1, x2) => {
   const rslt = [];
@@ -91,7 +90,7 @@ const setupCoins = (group, name, quantity) => {
  * @param {Phaser.Physics.Arcade.StaticGroup} platforms to setup
  */
 const setupCornerWalls = (platforms) => {
-  createStatic(platforms, 'wood', 0, 25, 17, 19);
+  createStatic(platforms, 'grass', 0, 25, 17, 19);
   createStatic(platforms, 'wood', 24, 25, 0, 19);
   // createStatic(platforms, 'wood', 0, 25, 0, 1);
   // createStatic(platforms, 'wood', 0, 1, 0, 19);
@@ -141,7 +140,21 @@ const setupLadderSeals = (seals) => {
 const checkContact = (a, b, x, y) => a.body.left - b.body.left < x && b.body.top - b.body.top < y;
 
 export default class GameScene extends Phaser.Scene {
+  constructor() {
+    const key = 'game';
+    super({ key });
+    this.key = key;
+    this.eventRelay = mixin({}, eventEmitter);
+  }
+
+  init = () => {
+    this.score = 0;
+    this.silverRemaining = true;
+    this.bronzeRemainig = true;
+  }
+
   preload = () => {
+    this.load.image('grass', grass);
     this.load.image('grid', grid);
     this.load.image('wood', wood);
     this.load.image('ladder', ladder);
@@ -153,10 +166,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create = () => {
-    this.score = 0;
-    this.silverRemaining = true;
-    this.bronzeRemainig = true;
-
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.add.image(400, 300, 'grid');
@@ -184,8 +193,8 @@ export default class GameScene extends Phaser.Scene {
 
     golds.create(2 * 32, 2 * 32, 'gold');
 
-    const player = this.physics.add.sprite(32 * 8, 32 * 2, 'hero');
-    // const player = this.physics.add.sprite(100, 520, 'hero');
+    // const player = this.physics.add.sprite(32 * 8, 32 * 2, 'hero');
+    const player = this.physics.add.sprite(100, 520, 'hero');
     player.setBounce(0.2);
     player.setDepth(1000);
     player.setCollideWorldBounds(true);
@@ -300,7 +309,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   gameOver = () => {
-    eventRelay.emit('game over', { score: this.score });
+    this.eventRelay.emit('game over', { score: this.score });
   };
 
   updateScore = (score) => {
@@ -337,7 +346,3 @@ export default class GameScene extends Phaser.Scene {
     this.gameOver();
   };
 }
-
-export {
-  eventRelay,
-};

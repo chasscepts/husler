@@ -1,12 +1,13 @@
 import './assets/css/style.scss';
 import Phaser from 'phaser';
 // eslint-disable-next-line import/extensions
-import GameScene, { eventRelay } from './game-scene.js';
+import GameScene from './scenes/game.js';
+import BootScene from './scenes/boot';
 
 const scene = new GameScene();
+const boot = new BootScene();
 
-// eslint-disable-next-line no-new
-new Phaser.Game({
+const game = new Phaser.Game({
   type: Phaser.AUTO,
   width: 800,
   height: 608,
@@ -18,9 +19,16 @@ new Phaser.Game({
       debug: false,
     },
   },
-  scene,
 });
 
-eventRelay.subscribe('game over', (payload) => {
-  console.log(payload);
+game.scene.add(boot.key, boot);
+game.scene.add(scene.key, scene);
+game.scene.start(boot.key);
+
+scene.eventRelay.subscribe('game over', (payload) => {
+  // console.log(payload);
+});
+
+boot.eventRelay.subscribe('completed', () => {
+  game.scene.start(scene.key);
 });
