@@ -1,13 +1,22 @@
 import './assets/css/style.scss';
 import Phaser from 'phaser';
-import GameScene from './game-scene';
+// eslint-disable-next-line import/extensions
+import GameScene from './game-scene.js';
 
 const scene = new GameScene();
 
-let game = new Phaser.Game({
+// eslint-disable-next-line no-new
+new Phaser.Game({
   type: Phaser.AUTO,
   width: 800,
-  height: 600,
+  height: 608,
   parent: document.querySelector('#canvas-container'),
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 300 },
+      debug: false,
+    },
+  },
   scene,
 });
