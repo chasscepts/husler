@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import point from './lib/point';
 import grid from './assets/images/grid.png';
 import wood from './assets/images/wood.png';
 import hero from './assets/images/hero-sm.png';
@@ -8,6 +9,40 @@ import gem2 from './assets/images/gem2.png';
 import gold from './assets/images/gold-coin.png';
 import door from './assets/images/door.png';
 
+const pointsRange = (y, x1, x2) => {
+  const rslt = [];
+  for (let x = x1; x <= x2; x += 1) {
+    rslt.push(point.create(x, y));
+  }
+  return rslt;
+};
+
+const freeCell = [
+  ...pointsRange(16, 2, 5),
+  ...pointsRange(16, 8, 11),
+  ...pointsRange(16, 14, 17),
+  ...pointsRange(16, 20, 23),
+  ...pointsRange(14, 3, 22),
+  ...pointsRange(12, 2, 11),
+  ...pointsRange(12, 14, 23),
+  ...pointsRange(10, 2, 5),
+  ...pointsRange(10, 8, 17),
+  ...pointsRange(10, 20, 23),
+  ...pointsRange(8, 2, 8),
+  ...pointsRange(8, 11, 20),
+  ...pointsRange(8, 23, 23),
+  ...pointsRange(6, 2, 6),
+  ...pointsRange(6, 14, 23),
+  ...pointsRange(4, 2, 6),
+  ...pointsRange(4, 9, 20),
+  ...pointsRange(4, 23, 23),
+  ...pointsRange(2, 7, 23),
+];
+
+const silvers = (() => {
+
+})();
+
 const mid = (a, b) => 32 * (a + (b - a) / 2);
 const s = (a, b) => 2 * (b - a);
 
@@ -16,18 +51,18 @@ const ladderLevels = [
   { x: [1, 23], y: [12.9, 15] },
   { x: [12], y: [10.9, 13] },
   { x: [6, 18], y: [8.9, 11] },
-  { x: [15, 21], y: [6.9, 9] },
+  { x: [9, 21], y: [6.9, 9] },
   { x: [12], y: [4.9, 7] },
-  { x: [3, 21], y: [2.9, 5] },
+  { x: [7, 21], y: [2.9, 5] },
 ];
 
 const sealsLevels = [
   { x: [1, 23], y: 15 },
   { x: [12], y: 13 },
   { x: [6, 18], y: 11 },
-  { x: [15, 21], y: 9 },
+  { x: [9, 21], y: 9 },
   { x: [12], y: 7 },
-  { x: [3, 21], y: 5 },
+  { x: [7, 21], y: 5 },
 ];
 
 const createStatic = (staticGroup, name, x1, x2, y1, y2) => {
@@ -67,15 +102,15 @@ const setupFloors = (platforms) => {
   });
   createStatic(platforms, 'wood', 7, 18, 9, 9.5);
 
-  createStatic(platforms, 'wood', 1, 15, 7, 7.5);
-  createStatic(platforms, 'wood', 16, 21, 7, 7.5);
+  createStatic(platforms, 'wood', 1, 9, 7, 7.5);
+  createStatic(platforms, 'wood', 10, 21, 7, 7.5);
   createStatic(platforms, 'wood', 22, 24, 7, 7.5);
 
   createStatic(platforms, 'wood', 1, 12, 5, 5.5);
   createStatic(platforms, 'wood', 13, 24, 5, 5.5);
 
-  createStatic(platforms, 'wood', 1, 3, 3, 3.5);
-  createStatic(platforms, 'wood', 4, 21, 3, 3.5);
+  createStatic(platforms, 'wood', 1, 7, 3, 3.5);
+  createStatic(platforms, 'wood', 8, 21, 3, 3.5);
   createStatic(platforms, 'wood', 22, 24, 3, 3.5);
 };
 
