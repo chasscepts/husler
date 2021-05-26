@@ -3,15 +3,7 @@ import point from '../lib/point';
 import randomItemGenerator from '../lib/random-item';
 import eventEmitter from '../lib/event-emitter';
 import mixin from '../lib/mixin';
-import grid from '../assets/images/grid.png';
-import wood from '../assets/images/wood.png';
-import hero from '../assets/images/hero-sm.png';
-import ladder from '../assets/images/ladder.png';
-import gem1 from '../assets/images/gem5.png';
-import gem2 from '../assets/images/gem2.png';
-import gold from '../assets/images/gold-coin.png';
-import door from '../assets/images/door.png';
-import grass from '../assets/images/grass.jpg';
+import assets from '../lib/assets';
 
 const pointsRange = (y, x1, x2) => {
   const rslt = [];
@@ -144,7 +136,7 @@ export default class GameScene extends Phaser.Scene {
     const key = 'game';
     super({ key });
     this.key = key;
-    this.eventRelay = mixin({}, eventEmitter);
+    // this.eventRelay = mixin({}, eventEmitter());
   }
 
   init = () => {
@@ -154,15 +146,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload = () => {
-    this.load.image('grass', grass);
-    this.load.image('grid', grid);
-    this.load.image('wood', wood);
-    this.load.image('ladder', ladder);
-    this.load.spritesheet('hero', hero, { frameWidth: 40, frameHeight: 40 });
-    this.load.image('gold', gold);
-    this.load.image('silver', gem1);
-    this.load.image('bronze', gem2);
-    this.load.image('door', door);
+    this.load.image('grass', assets.grass);
+    this.load.image('grid', assets.grid);
+    this.load.image('wood', assets.wood);
+    this.load.image('ladder', assets.ladder);
+    this.load.spritesheet('hero', assets.hero, { frameWidth: 40, frameHeight: 40 });
+    this.load.image('gold', assets.gold);
+    this.load.image('silver', assets.gem1);
+    this.load.image('bronze', assets.gem2);
+    this.load.image('door', assets.door);
   }
 
   create = () => {

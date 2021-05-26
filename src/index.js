@@ -1,16 +1,19 @@
 import './assets/css/style.scss';
 import Phaser from 'phaser';
 // eslint-disable-next-line import/extensions
-import GameScene from './scenes/game.js';
 import BootScene from './scenes/boot';
+import PreloaderScene from './scenes/preloader';
+import GameScene from './scenes/game';
+import assets from './lib/assets';
 
-const scene = new GameScene();
 const boot = new BootScene();
+const preloader = new PreloaderScene();
+const scene = new GameScene();
 
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   width: 800,
-  height: 608,
+  height: 600,
   parent: document.querySelector('#canvas-container'),
   physics: {
     default: 'arcade',
@@ -19,16 +22,30 @@ const game = new Phaser.Game({
       debug: false,
     },
   },
+  pack: {
+    files: [
+      {
+        type: 'image',
+        key: 'loader-bg',
+        url: assets.bg,
+      },
+    ],
+  },
 });
 
-game.scene.add(boot.key, boot);
-game.scene.add(scene.key, scene);
+[boot, preloader, scene].forEach((scene) => game.scene.add(scene.key, scene));
 game.scene.start(boot.key);
 
-scene.eventRelay.subscribe('game over', (payload) => {
-  // console.log(payload);
+// scene.eventRelay.subscribe('game over', (payload) => {
+//   // console.log(payload);
+// });
+
+preloader.eventRelay.subscribe('completed', () => {
+  game.scene.remove(preloader.key);
+  game.scene.start(scene.key);
 });
 
 boot.eventRelay.subscribe('completed', () => {
-  game.scene.start(scene.key);
+  game.scene.remove(boot.key);
+  game.scene.start(preloader.key);
 });

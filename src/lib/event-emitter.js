@@ -1,4 +1,4 @@
-const eventEmitter = (() => {
+const eventEmitter = () => {
   const subscribers = Object.create(null);
 
   return {
@@ -19,10 +19,12 @@ const eventEmitter = (() => {
     emit: (event, payload) => {
       const callbacks = subscribers[event];
       if (callbacks) {
-        callbacks.forEach((callback) => callback(payload));
+        callbacks.forEach((callback) => {
+          callback(payload);
+        });
       }
     },
   };
-})();
+};
 
 export default eventEmitter;
