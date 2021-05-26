@@ -72,13 +72,21 @@ Give a ⭐️ if you like this project!
 
 - ladder, wood [R3tr0BoiDX](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 
-- gem 1 and gem 2 by [codeinfernogames](https://opengameart.org/users/codeinfernogames) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
+- space [Scribe](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+
+- gem 1 and gem 2 by [codeinfernogames](https://opengameart.org/users/scribe) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
 
 - coin by [WarmGuy](https://opengameart.org/users/warmguy) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
 
 - gold coin by [Tweetfold](https://opengameart.org/users/tweetfold) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
 
-- mist [Vjekoslav Domanović](https://unsplash.com/@vjeblackbirdlion?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/mist?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+- pinball [Heather McKean](https://unsplash.com/@hjmckean?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/3d-game?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+
+- title-frame [Johannes Plenio](https://unsplash.com/@jplenio?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/frames?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+
+- gold-frame, gold-btn from [pngwing.com](https://www.pngwing.com/en/free-png-bmijr/download)
+
+- mist []() on [Unsplash]()
 
 - Microverse Community
 - Everyone whose code was used in this project

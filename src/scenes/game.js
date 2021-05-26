@@ -3,7 +3,7 @@ import point from '../lib/point';
 import randomItemGenerator from '../lib/random-item';
 import eventEmitter from '../lib/event-emitter';
 import mixin from '../lib/mixin';
-import assets from '../lib/assets';
+import assets, { bootSprites } from '../lib/assets';
 
 const pointsRange = (y, x1, x2) => {
   const rslt = [];
@@ -82,37 +82,37 @@ const setupCoins = (group, name, quantity) => {
  * @param {Phaser.Physics.Arcade.StaticGroup} platforms to setup
  */
 const setupCornerWalls = (platforms) => {
-  createStatic(platforms, 'grass', 0, 25, 17, 19);
-  createStatic(platforms, 'wood', 24, 25, 0, 19);
-  // createStatic(platforms, 'wood', 0, 25, 0, 1);
-  // createStatic(platforms, 'wood', 0, 1, 0, 19);
+  createStatic(platforms, assets.grass.key, 0, 25, 17, 19);
+  createStatic(platforms, assets.wood.key, 24, 25, 0, 19);
+  createStatic(platforms, assets.wood.key, 0, 25, 0, 1);
+  createStatic(platforms, assets.wood.key, 0, 1, 0, 19);
 };
 
 const setupFloors = (platforms) => {
   [1, 7, 13, 19].forEach((x) => {
-    createStatic(platforms, 'wood', x, x + 5, 15, 15.5);
+    createStatic(platforms, assets.wood.key, x, x + 5, 15, 15.5);
   });
 
-  createStatic(platforms, 'wood', 2, 23, 13, 13.5);
+  createStatic(platforms, assets.wood.key, 2, 23, 13, 13.5);
   [1, 13].forEach((x) => {
-    createStatic(platforms, 'wood', x, x + 11, 11, 11.5);
+    createStatic(platforms, assets.wood.key, x, x + 11, 11, 11.5);
   });
 
   [1, 19].forEach((x) => {
-    createStatic(platforms, 'wood', x, x + 5, 9, 9.5);
+    createStatic(platforms, assets.wood.key, x, x + 5, 9, 9.5);
   });
-  createStatic(platforms, 'wood', 7, 18, 9, 9.5);
+  createStatic(platforms, assets.wood.key, 7, 18, 9, 9.5);
 
-  createStatic(platforms, 'wood', 1, 9, 7, 7.5);
-  createStatic(platforms, 'wood', 10, 21, 7, 7.5);
-  createStatic(platforms, 'wood', 22, 24, 7, 7.5);
+  createStatic(platforms, assets.wood.key, 1, 9, 7, 7.5);
+  createStatic(platforms, assets.wood.key, 10, 21, 7, 7.5);
+  createStatic(platforms, assets.wood.key, 22, 24, 7, 7.5);
 
-  createStatic(platforms, 'wood', 1, 12, 5, 5.5);
-  createStatic(platforms, 'wood', 13, 24, 5, 5.5);
+  createStatic(platforms, assets.wood.key, 1, 12, 5, 5.5);
+  createStatic(platforms, assets.wood.key, 13, 24, 5, 5.5);
 
-  createStatic(platforms, 'wood', 1, 7, 3, 3.5);
-  createStatic(platforms, 'wood', 8, 21, 3, 3.5);
-  createStatic(platforms, 'wood', 22, 24, 3, 3.5);
+  createStatic(platforms, assets.wood.key, 1, 7, 3, 3.5);
+  createStatic(platforms, assets.wood.key, 8, 21, 3, 3.5);
+  createStatic(platforms, assets.wood.key, 22, 24, 3, 3.5);
 };
 
 /**
@@ -122,21 +122,23 @@ const setupFloors = (platforms) => {
  * @param {Phaser.Physics} physics config
  */
 const setupLadders = (ladders) => {
-  ladderLevels.forEach(({ x, y }) => x.forEach((x) => createStatic(ladders, 'ladder', x, x + 1, y[0], y[1])));
+  ladderLevels.forEach(({ x, y }) => x.forEach(
+    (x) => createStatic(ladders, assets.ladder.key, x, x + 1, y[0], y[1]),
+  ));
 };
 
 const setupLadderSeals = (seals) => {
-  sealsLevels.forEach(({ x, y }) => x.forEach((x) => createStatic(seals, 'wood', x, x + 1, y, y + 0.5)));
+  sealsLevels.forEach(({ x, y }) => x.forEach(
+    (x) => createStatic(seals, assets.wood.key, x, x + 1, y, y + 0.5),
+  ));
 };
 
 const checkContact = (a, b, x, y) => a.body.left - b.body.left < x && b.body.top - b.body.top < y;
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    const key = 'game';
-    super({ key });
-    this.key = key;
-    // this.eventRelay = mixin({}, eventEmitter());
+    super({ key: GameScene.key });
+    this.eventRelay = mixin({}, eventEmitter());
   }
 
   init = () => {
@@ -146,21 +148,12 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload = () => {
-    this.load.image('grass', assets.grass);
-    this.load.image('grid', assets.grid);
-    this.load.image('wood', assets.wood);
-    this.load.image('ladder', assets.ladder);
-    this.load.spritesheet('hero', assets.hero, { frameWidth: 40, frameHeight: 40 });
-    this.load.image('gold', assets.gold);
-    this.load.image('silver', assets.gem1);
-    this.load.image('bronze', assets.gem2);
-    this.load.image('door', assets.door);
+    // this.load.spritesheet('hero', assets.hero, { frameWidth: 40, frameHeight: 40 });
   }
 
   create = () => {
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.add.image(400, 300, 'grid');
     const walls = this.physics.add.staticGroup();
     const platforms = this.physics.add.staticGroup();
     setupCornerWalls(walls);
@@ -174,53 +167,53 @@ export default class GameScene extends Phaser.Scene {
     const silvers = this.physics.add.staticGroup();
     const bronzes = this.physics.add.staticGroup();
 
-    this.door = createStatic(doors, 'door', 5, 5.5, 1, 2.5);
+    this.door = createStatic(doors, assets.door.key, 5, 5.5, 1, 2.5);
 
     setupLadders(ladders);
     setupLadderSeals(ladderSeals);
     setupFloors(platforms);
 
-    setupCoins(silvers, 'silver', 5);
-    setupCoins(bronzes, 'bronze', 10);
+    setupCoins(silvers, assets.silver.key, 5);
+    setupCoins(bronzes, assets.bronze.key, 10);
 
-    golds.create(2 * 32, 2 * 32, 'gold');
+    golds.create(2 * 32, 2 * 32, assets.gold.key);
 
     // const player = this.physics.add.sprite(32 * 8, 32 * 2, 'hero');
-    const player = this.physics.add.sprite(100, 520, 'hero');
+    const player = this.physics.add.sprite(100, 520, bootSprites.hero.key);
     player.setBounce(0.2);
     player.setDepth(1000);
     player.setCollideWorldBounds(true);
 
     this.anims.create({
       key: 'left',
-      frames: this.anims.generateFrameNumbers('hero', { start: 8, end: 11 }), // 8, 11
+      frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 8, end: 11 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'turn',
-      frames: [{ key: 'hero', frame: 1 }],
+      frames: [{ key: bootSprites.hero.key, frame: 1 }],
       frameRate: 0,
     });
 
     this.anims.create({
       key: 'right',
-      frames: this.anims.generateFrameNumbers('hero', { start: 12, end: 15 }),
+      frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 12, end: 15 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'up',
-      frames: this.anims.generateFrameNumbers('hero', { start: 4, end: 7 }),
+      frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 4, end: 7 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'down',
-      frames: this.anims.generateFrameNumbers('hero', { start: 1, end: 3 }),
+      frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 1, end: 3 }),
       frameRate: 10,
       repeat: -1,
     });
@@ -257,9 +250,10 @@ export default class GameScene extends Phaser.Scene {
     this.silvers = silvers;
     this.bronzes = bronzes;
 
-    this.board = this.add.text(64, 17.5 * 32, 'Score: 0', {
-      fontSize: '32px', fill: '#0f0',
+    this.board = this.add.text(64, 18 * 32, 'Score: 0', {
+      fontSize: '24px', fill: '#0f0',
     });
+    this.add.image(400, 300, assets.grid.key);
   }
 
   update = () => {
@@ -338,3 +332,5 @@ export default class GameScene extends Phaser.Scene {
     this.gameOver();
   };
 }
+
+GameScene.key = 'game';

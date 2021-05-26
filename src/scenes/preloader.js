@@ -1,18 +1,9 @@
 import Phaser from 'phaser';
 import eventEmitter from '../lib/event-emitter';
 import mixin from '../lib/mixin';
-import assets from '../lib/assets';
+import assets, { htmls, sprites } from '../lib/assets';
 
-const filenameWithoutExtension = (name) => {
-  const idx = name.lastIndexOf('.');
-  if (idx > 0) {
-    name = name.substring(0, idx);
-  }
-
-  return name;
-};
-
-const progressY = 190;
+const progressY = 0;
 const progressH = 20;
 const progressFill = 0x008ecc;
 
@@ -82,30 +73,42 @@ const setupProgress = (progress, load, eventRelay) => {
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
-    const key = 'preloader';
-    super({ key });
-    this.key = key;
+    super({ key: PreloaderScene.key });
     this.eventRelay = mixin({}, eventEmitter());
   }
 
   preload = () => {
-    this.load.image('loader-bg', assets.bg);
+    this.load.image(assets.pinball.key, assets.pinball.file);
     const progress = this.add.graphics();
     progress.setDepth(10);
     this.progress = simulateProgress(progress, this.eventRelay);
     // setupProgress(progress, this.load, this.eventRelay);
 
     Object.keys(assets).forEach((key) => {
-      const file = filenameWithoutExtension(assets[key]);
-      this.load.image(file);
+      const asset = assets[key];
+      this.load.image(asset.key, asset.file);
+    });
+
+    Object.keys(sprites).forEach((key) => {
+      const sprite = sprites[key];
+      this.load.spritesheet(
+        sprite.key, sprite.file, { frameWidth: sprite.width, frameHeight: sprite.width },
+      );
+    });
+
+    Object.keys(htmls).forEach((key) => {
+      const asset = htmls[key];
+      this.load.html(asset.key, asset.file);
     });
   }
 
   create = () => {
-    this.add.image(400, 300, 'loader-bg').setScale(2);
+    this.add.image(400, 300, assets.pinball.key).setScale(2);
   }
 
   update = () => {
 
   }
 }
+
+PreloaderScene.key = 'preloader';

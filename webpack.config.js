@@ -43,6 +43,14 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(html)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
   },
   plugins: [
