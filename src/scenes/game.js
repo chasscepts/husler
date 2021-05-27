@@ -4,6 +4,7 @@ import eventEmitter from '../lib/event-emitter';
 import mixin from '../lib/mixin';
 import coinGeneratorFactory from '../lib/coin-generator';
 import assets, { bootSprites } from '../lib/assets';
+import timeKeeperFactory from '../lib/time-keeper';
 
 const pointsRange = (y, x1, x2) => {
   const rslt = [];
@@ -163,9 +164,6 @@ export default class GameScene extends Phaser.Scene {
     setupLadderSeals(ladderSeals);
     setupFloors(platforms);
 
-    // setupCoins(silvers, assets.silver.key, 5);
-    // setupCoins(bronzes, assets.bronze.key, 10);
-
     const coinGenerator = coinGeneratorFactory.create(freeCells);
     coinGenerator.on('coin', (coin) => {
       let group = villainAssistances;
@@ -185,7 +183,6 @@ export default class GameScene extends Phaser.Scene {
 
     golds.create(2 * 32, 2 * 32, assets.gold.key);
 
-    // const player = this.physics.add.sprite(32 * 8, 32 * 2, 'hero');
     const player = this.physics.add.sprite(100, 520, bootSprites.hero.key);
     player.setBounce(0.2);
     player.setDepth(1000);
@@ -262,6 +259,11 @@ export default class GameScene extends Phaser.Scene {
     this.board = this.add.text(64, 18 * 32, 'Score: 0', {
       fontSize: '24px', fill: '#0f0',
     });
+
+    const timeKeeper = timeKeeperFactory.create();
+    timeKeeperFactory.on('game over', this.gameOver);
+    this.timeKeeper = timeKeeper;
+
     this.add.image(400, 300, assets.grid.key);
   }
 
@@ -303,6 +305,7 @@ export default class GameScene extends Phaser.Scene {
     this.playerCanClimb = false;
 
     this.coinGenerator.tick(delta);
+    this.timeKeeper.tick();
   }
 
   gameOver = () => {
