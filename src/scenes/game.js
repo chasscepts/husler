@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import point from '../lib/point';
-import randomItemGenerator from '../lib/random-item';
 import eventEmitter from '../lib/event-emitter';
 import mixin from '../lib/mixin';
+import coinGeneratorFactory from '../lib/coin-generator';
 import assets, { bootSprites } from '../lib/assets';
 
 const pointsRange = (y, x1, x2) => {
@@ -35,8 +35,6 @@ const freeCells = [
   ...pointsRange(2, 7, 23),
 ];
 
-const generator = randomItemGenerator.create(freeCells);
-
 const mid = (a, b) => 32 * (a + (b - a) / 2);
 const s = (a, b) => 2 * (b - a);
 
@@ -64,17 +62,6 @@ const createStatic = (staticGroup, name, x1, x2, y1, y2) => {
   staticObject.body.immovable = true;
   staticObject.setScale(s(x1, x2), s(y1, y2)).refreshBody();
   return staticObject;
-};
-
-const createGem = (group, name, x, y) => {
-  group.create(32 * x, 32 * y, name);
-};
-
-const setupCoins = (group, name, quantity) => {
-  for (let i = 0; i < quantity; i += 1) {
-    const p = generator.next();
-    createGem(group, name, p.x, p.y);
-  }
 };
 
 /**
@@ -166,6 +153,9 @@ export default class GameScene extends Phaser.Scene {
     const golds = this.physics.add.staticGroup();
     const silvers = this.physics.add.staticGroup();
     const bronzes = this.physics.add.staticGroup();
+    const villainAssistances = this.physics.add.staticGroup();
+    // silvers.enableBody = true;
+    // bronzes.enableBody = true;
 
     this.door = createStatic(doors, assets.door.key, 5, 5.5, 1, 2.5);
 
@@ -173,8 +163,25 @@ export default class GameScene extends Phaser.Scene {
     setupLadderSeals(ladderSeals);
     setupFloors(platforms);
 
-    setupCoins(silvers, assets.silver.key, 5);
-    setupCoins(bronzes, assets.bronze.key, 10);
+    // setupCoins(silvers, assets.silver.key, 5);
+    // setupCoins(bronzes, assets.bronze.key, 10);
+
+    const coinGenerator = coinGeneratorFactory.create(freeCells);
+    coinGenerator.on('coin', (coin) => {
+      let group = villainAssistances;
+      if (coin.type === assets.silver.key) {
+        group = silvers;
+      } else if (coin.type === assets.bronze.key) {
+        group = bronzes;
+      }
+      const gameObject = group.create(32 * coin.x, 32 * coin.y, coin.asset);
+      coin.on('lifeup', () => {
+        gameObject.destroy();
+      });
+      gameObject.on('collected', () => {
+        coin.destroy();
+      });
+    });
 
     golds.create(2 * 32, 2 * 32, assets.gold.key);
 
@@ -245,10 +252,12 @@ export default class GameScene extends Phaser.Scene {
     );
     this.physics.add.overlap(player, silvers, this.collectSilver, null, this);
     this.physics.add.overlap(player, bronzes, this.collectBronze, null, this);
+    this.physics.add.overlap(player, villainAssistances, this.collectVillain, null, this);
 
     this.player = player;
     this.silvers = silvers;
     this.bronzes = bronzes;
+    this.coinGenerator = coinGenerator;
 
     this.board = this.add.text(64, 18 * 32, 'Score: 0', {
       fontSize: '24px', fill: '#0f0',
@@ -256,7 +265,7 @@ export default class GameScene extends Phaser.Scene {
     this.add.image(400, 300, assets.grid.key);
   }
 
-  update = () => {
+  update = (time, delta) => {
     this.isPlayerClimbingLadder = false;
     let playerStanding = true;
     if (this.playerCanClimb) {
@@ -292,6 +301,8 @@ export default class GameScene extends Phaser.Scene {
     }
     this.player.body.setAllowGravity(!this.playerCanClimb);
     this.playerCanClimb = false;
+
+    this.coinGenerator.tick(delta);
   }
 
   gameOver = () => {
@@ -305,26 +316,20 @@ export default class GameScene extends Phaser.Scene {
 
   collectSilver = (player, silver) => {
     this.updateScore(30);
-    silver.disableBody(true, true);
-
-    if (this.silvers.countActive(true) === 0) {
-      this.silverRemaining = false;
-      if (!this.bronzeRemainig) {
-        this.gameOver();
-      }
-    }
+    silver.destroy();
+    silver.emit('collected');
   }
 
   collectBronze = (player, bronze) => {
     this.updateScore(10);
-    bronze.disableBody(true, true);
+    bronze.destroy();
+    bronze.emit('collected');
+  }
 
-    if (this.bronzes.countActive(true) === 0) {
-      this.bronzeRemainig = false;
-      if (!this.silverRemaining) {
-        this.gameOver();
-      }
-    }
+  collectVillain = (player, villain) => {
+    villain.destroy();
+    villain.emit('collected');
+    this.gameOver();
   }
 
   collectGold = () => {
