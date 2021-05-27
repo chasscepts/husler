@@ -70,9 +70,9 @@ Give a ⭐️ if you like this project!
 
 - hero sprite by [pondomaniac](https://opengameart.org/users/pondomaniac) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 
-- ladder, wood [R3tr0BoiDX](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+- ladder, wood by [R3tr0BoiDX](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 
-- space [Scribe](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+- space by [Scribe](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 
 - gem 1 and gem 2 by [codeinfernogames](https://opengameart.org/users/scribe) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
 
@@ -80,13 +80,18 @@ Give a ⭐️ if you like this project!
 
 - gold coin by [Tweetfold](https://opengameart.org/users/tweetfold) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
 
-- pinball [Heather McKean](https://unsplash.com/@hjmckean?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/3d-game?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+- pinball by [Heather McKean](https://unsplash.com/@hjmckean?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/3d-game?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
-- title-frame [Johannes Plenio](https://unsplash.com/@jplenio?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/frames?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+- title-frame by [Johannes Plenio](https://unsplash.com/@jplenio?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/frames?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
 - gold-frame, gold-btn from [pngwing.com](https://www.pngwing.com/en/free-png-bmijr/download)
 
+- x-btn by [publicdomainvectors.org](https://publicdomainvectors.org/en/free-clipart/Dark-red-button-in-gray-frame/25778.html)
+
+- score-bg by [Sigmund](https://unsplash.com/@sigmund?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+
 - mist []() on [Unsplash]()
+
 
 - Microverse Community
 - Everyone whose code was used in this project

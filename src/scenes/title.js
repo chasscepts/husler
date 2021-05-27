@@ -42,7 +42,7 @@ export default class TitleScene extends Phaser.Scene {
       });
     this.add.image(grid.valueOf(17), grid.valueOf(14), assets.leaderboardBtn.key)
       .setInteractive({ useHandCursor: true })
-      .on('', () => {
+      .on('pointerdown', () => {
         this.eventRelay.emit('show leaderboard');
       });
     // this.add.image(400, 300, assets.grid.key);

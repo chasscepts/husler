@@ -5,6 +5,7 @@ import BootScene from './scenes/boot';
 import PreloaderScene from './scenes/preloader';
 import TitleScene from './scenes/title';
 import GameScene from './scenes/game';
+import LeaderboardScene from './scenes/leaderboard';
 import assets from './lib/assets';
 
 const game = new Phaser.Game({
@@ -36,7 +37,14 @@ const game = new Phaser.Game({
 const completed = 'completed';
 
 const startLeaderboardScene = () => {
-
+  const scene = new LeaderboardScene();
+  game.scene.add(LeaderboardScene.key, scene);
+  scene.eventRelay.subscribe('exit', () => {
+    game.scene.remove(LeaderboardScene.key);
+    // eslint-disable-next-line no-use-before-define
+    startTitleScene();
+  });
+  game.scene.start(LeaderboardScene.key);
 };
 
 const startGameScene = () => {

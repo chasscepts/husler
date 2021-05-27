@@ -81,8 +81,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image(assets.pinball.key, assets.pinball.file);
     const progress = this.add.graphics();
     progress.setDepth(10);
-    this.progress = simulateProgress(progress, this.eventRelay);
-    // setupProgress(progress, this.load, this.eventRelay);
+    // this.progress = simulateProgress(progress, this.eventRelay);
+    setupProgress(progress, this.load, this.eventRelay);
 
     Object.keys(assets).forEach((key) => {
       const asset = assets[key];

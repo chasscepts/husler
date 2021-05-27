@@ -15,6 +15,10 @@ import titleFrame from '../assets/images/title-frame.png';
 import playerNameForm from '../assets/texts/name-form.html';
 import playBtn from '../assets/images/gold-btn-play.png';
 import leaderboardBtn from '../assets/images/gold-btn-leaderboard.png';
+import goldFrame from '../assets/images/gold-frame.png';
+import closeBtn from '../assets/images/x-btn.png';
+import scoreBg from '../assets/images/score-bg.png';
+import prussianBg from '../assets/images/prussian-bg.png';
 
 export const htmls = { playerNameForm: { key: 'playerNameForm', file: playerNameForm } };
 
@@ -47,4 +51,8 @@ export default {
   titleFrame: { key: 'titleFrame', file: titleFrame },
   playBtn: { key: 'playBtn', file: playBtn },
   leaderboardBtn: { key: 'leaderboardBtn', file: leaderboardBtn },
+  goldFrame: { key: 'gold-frame', file: goldFrame },
+  closeBtn: { key: 'x-button', file: closeBtn },
+  scoreBg: { key: 'score-bg', file: scoreBg },
+  prussianBg: { key: 'prussian-bg', file: prussianBg },
 };
