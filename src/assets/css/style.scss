@@ -4,3 +4,47 @@
 main {
   padding-top: 25px;
 }
+
+.scene {
+  width: 800px;
+  height: 600px;
+  transform: translate(100px, -100px);
+}
+
+.boot-scene {
+  overflow: hidden;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #008ecc;
+  color: #02071b;
+  font-family: 'Lobster', cursive;
+
+  .title {
+    font-size: 72px;
+    margin-bottom: 150px;
+    font-family: 'Ultra', serif;
+  }
+
+  .loading {
+    font-size: 32px;
+    position: relative;
+    width: 150px;
+    height: 22px;
+  }
+
+  .loading::after {
+    display: inline-block;
+    animation: dotty steps(1,end) 1s infinite;
+    content: '';
+  }
+
+  @keyframes dotty {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+    100% { content: ''; }
+  }
+}

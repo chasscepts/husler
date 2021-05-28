@@ -89,7 +89,7 @@ const Api = {
         mode: 'cors',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: service.name,
+        body: JSON.stringify({ name: service.name }),
       };
       service.fetch(`${baseUrl}games/`, options)
         .then((response) => {

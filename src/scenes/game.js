@@ -72,11 +72,12 @@ const createStatic = (staticGroup, name, x1, x2, y1, y2) => {
 const setupCornerWalls = (platforms) => {
   createStatic(platforms, assets.grass.key, 0, 25, 17, 19);
   createStatic(platforms, assets.wood.key, 24, 25, 0, 19);
-  createStatic(platforms, assets.wood.key, 0, 25, 0, 1);
-  createStatic(platforms, assets.wood.key, 0, 1, 0, 19);
 };
 
 const setupFloors = (platforms) => {
+  createStatic(platforms, assets.wood.key, 0, 1, 0, 19);
+  createStatic(platforms, assets.wood.key, 0, 25, 0, 1);
+
   [1, 7, 13, 19].forEach((x) => {
     createStatic(platforms, assets.wood.key, x, x + 5, 15, 15.5);
   });
@@ -133,6 +134,7 @@ export default class GameScene extends Phaser.Scene {
     this.score = 0;
     this.silverRemaining = true;
     this.bronzeRemainig = true;
+    this.isVillainClimbingLadder = false;
   }
 
   preload = () => {
@@ -188,6 +190,15 @@ export default class GameScene extends Phaser.Scene {
     player.setDepth(1000);
     player.setCollideWorldBounds(true);
 
+    this.player = player;
+    this.silvers = silvers;
+    this.bronzes = bronzes;
+    this.platforms = platforms;
+    this.walls = walls;
+    this.doors = doors;
+    this.ladders = ladders;
+    this.ladderSeals = ladderSeals;
+
     this.anims.create({
       key: 'left',
       frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 8, end: 11 }),
@@ -217,10 +228,12 @@ export default class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'down',
-      frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 1, end: 3 }),
+      frames: this.anims.generateFrameNumbers(bootSprites.hero.key, { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1,
     });
+
+    this.villain = this.physics.add.sprite(100, 520, bootSprites.villain.key);
 
     this.physics.add.collider(player, doors);
     this.physics.add.collider(player, walls);
@@ -247,13 +260,11 @@ export default class GameScene extends Phaser.Scene {
       () => this.collectGold,
       (player, gold) => checkContact(player, gold, 32, 32),
     );
+
     this.physics.add.overlap(player, silvers, this.collectSilver, null, this);
     this.physics.add.overlap(player, bronzes, this.collectBronze, null, this);
     this.physics.add.overlap(player, villainAssistances, this.collectVillain, null, this);
 
-    this.player = player;
-    this.silvers = silvers;
-    this.bronzes = bronzes;
     this.coinGenerator = coinGenerator;
 
     this.board = this.add.text(64, 18 * 32, 'Score: 0', {

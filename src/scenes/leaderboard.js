@@ -4,14 +4,14 @@ import eventEmitter from '../lib/event-emitter';
 import grid from '../lib/grid';
 import mixin from '../lib/mixin';
 
-const leaders = [
-  { name: 'Francis', score: 800 },
-  { name: 'Charles', score: 700 },
-  { name: 'Chidimma', score: 600 },
-  { name: 'Maureen', score: 500 },
-  { name: 'Netochukwu', score: 400 },
-  { name: 'Chi Chi', score: 300 },
-];
+// const leaders = [
+//   { user: 'Francis', score: 800 },
+//   { user: 'Charles', score: 700 },
+//   { user: 'Chidimma', score: 600 },
+//   { user: 'Maureen', score: 500 },
+//   { user: 'Netochukwu', score: 400 },
+//   { user: 'Chi Chi', score: 300 },
+// ];
 
 const getBoard = (leaders) => `
   <div style="width: 330px;height:450px;padding:25px;display:flex;flex-flow:column nowrap;color:#fff;font-size:1.2rem;overflow:auto;font-family: 'Pattaya', sans-serif;">
@@ -22,7 +22,7 @@ const getBoard = (leaders) => `
     <div>
   ${leaders.map((leader) => `
     <div style="display:flex;padding:5px;">
-      <span style="flex:1;">${leader.name}</span>
+      <span style="flex:1;">${leader.user}</span>
       <span style="flex:0 0 40px;">${leader.score}</span>
     </div>
   `).join('')}
@@ -31,8 +31,9 @@ const getBoard = (leaders) => `
 `;
 
 export default class LeaderboardScene extends Phaser.Scene {
-  constructor() {
+  constructor(records) {
     super({ key: LeaderboardScene.key });
+    this.records = records;
     this.eventRelay = mixin({}, eventEmitter());
   }
 
@@ -40,7 +41,7 @@ export default class LeaderboardScene extends Phaser.Scene {
     this.add.image(400, 300, assets.scoreBg.key).setScale(2);
     this.add.image(grid.valueOf(12.5), grid.valueOf(9.7), assets.goldFrame.key);
     this.add.image(grid.valueOf(12.5), grid.valueOf(9.7), assets.prussianBg.key);
-    this.add.dom(grid.valueOf(12.5), grid.valueOf(9.7)).createFromHTML(getBoard(leaders));
+    this.add.dom(grid.valueOf(12.5), grid.valueOf(9.7)).createFromHTML(getBoard(this.records));
     this.add.image(grid.valueOf(23.5), grid.valueOf(1.5), assets.closeBtn.key)
       .setInteractive({ useHandCursor: true })
       .on('pointerdown', () => {

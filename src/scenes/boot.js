@@ -13,6 +13,13 @@ const createStatic = (staticGroup, name, x1, x2, y1, y2) => {
   return staticObject;
 };
 
+const html = `
+  <div class="scene boot-scene">
+    <div class="title">OGBA MBO</div>
+    <div class="loading">Booting</div>
+  </div>
+`;
+
 export default class BootScene extends Phaser.Scene {
   constructor() {
     super({ key: BootScene.key });
@@ -38,6 +45,10 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create = () => {
+    this.add.dom(300, 400).createFromHTML(html);
+  }
+
+  create1 = () => {
     this.cameras.main.fadeFrom(
       2000, Phaser.Math.Between(50, 255),
       Phaser.Math.Between(50, 255), Phaser.Math.Between(50, 255),
@@ -77,10 +88,6 @@ export default class BootScene extends Phaser.Scene {
 
     this.player.setVelocityX(150);
     this.player.anims.play('right', true);
-  }
-
-  update = () => {
-
   }
 }
 

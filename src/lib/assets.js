@@ -1,6 +1,7 @@
 import grid from '../assets/images/grid.png';
 import wood from '../assets/images/wood.png';
 import hero from '../assets/images/hero-sm.png';
+import villain from '../assets/images/villain.png';
 import ladder from '../assets/images/ladder.png';
 import silver from '../assets/images/gem5.png';
 import bronze from '../assets/images/gem2.png';
@@ -29,6 +30,9 @@ export const sprites = {
 export const bootSprites = {
   hero: {
     key: 'hero', file: hero, width: 40, height: 40,
+  },
+  villain: {
+    key: 'villain', file: villain, width: 42, height: 38,
   },
 };
 
