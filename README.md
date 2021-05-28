@@ -16,7 +16,7 @@
 
 ## Live Demo
 
-[Github Pages](https://chasscepts.github.io/phaser-game/)
+[Game](https://friendly-varahamihira-bd76c2.netlify.app/)
 
 ## Getting Started
 
