@@ -17,7 +17,7 @@ describe('Api', () => {
           expect(options.mode).toBe('cors');
           expect(options.method).toBe('POST');
           expect(options.headers['Content-Type']).toBe('application/json');
-          expect(options.body).toBe(name);
+          expect(options.body).toBe(JSON.stringify({ name }));
 
           return Promise.resolve({
             json: () => Promise.resolve({ result: 'Game with ID: game-id added.' }),

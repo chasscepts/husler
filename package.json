@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.14.0",
     "@babel/preset-env": "^7.14.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
@@ -33,7 +34,7 @@
   "scripts": {
     "eslint": "npx eslint .",
     "stylelint": "npx stylelint \"**/*.scss\"",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test": "jest",
     "build": "webpack --progress --mode=production",
     "watch": "webpack --progress --watch",
     "serve": "webpack serve --mode development --env development --open",
@@ -48,6 +49,15 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/chasscepts/phaser-game/issues"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
   },
   "homepage": "https://github.com/chasscepts/phaser-game#readme"
 }

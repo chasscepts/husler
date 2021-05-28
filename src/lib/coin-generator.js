@@ -2,9 +2,14 @@
  * A Utility for generating coins at random intervals
  */
 
-import assets from './assets';
+// import assets from './assets';
 import random from './random-item';
 import eventEmitter from './event-emitter';
+
+const assets = {
+  bronze: { key: 'bronze' },
+  silver: { key: 'silver' },
+};
 
 const create = (collection, randomNumberGenerator = { get: () => Math.random() }) => {
   let pointGenerator = random.create(collection);
