@@ -1,6 +1,5 @@
 import './assets/css/style.scss';
 import Phaser from 'phaser';
-// eslint-disable-next-line import/extensions
 import BootScene from './scenes/boot';
 import PreloaderScene from './scenes/preloader';
 import TitleScene from './scenes/title';

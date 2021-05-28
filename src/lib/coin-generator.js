@@ -12,11 +12,13 @@ const create = (collection, randomNumberGenerator = { get: () => Math.random() }
 
   const VILLAIN_TYPE = 'villain';
 
-  const generateSilver = () => randomNumberGenerator.get() > 0.65;
+  const generateSilver = () => randomNumberGenerator.get() > 0.55;
 
-  const generateBronze = () => randomNumberGenerator.get() > 0.55;
+  const generateBronze = () => randomNumberGenerator.get() > 0.65;
 
   const generateVillain = () => !hasActiveVillain && randomNumberGenerator.get() > 0.8;
+
+  const slideDoor = () => randomNumberGenerator.get() > 0.55;
 
   const randomInteger = (min, max) => Math.floor(randomNumberGenerator.get() * (max - min) + min);
 
@@ -88,6 +90,35 @@ const create = (collection, randomNumberGenerator = { get: () => Math.random() }
     return generated;
   };
 
+  const doorTimeKeeper = (() => {
+    const SECONDS_BETWEEN_DOOR_SLIDES = 50;
+    let lifeSpan = 0;
+
+    let doorTick = 0;
+    let active = false;
+    return {
+      tick: () => {
+        doorTick += 1;
+        if (active) {
+          if (doorTick >= lifeSpan) {
+            active = false;
+            doorTick = 0;
+            coinRelay.emit('close door');
+          }
+        } else if (doorTick >= SECONDS_BETWEEN_DOOR_SLIDES) {
+          if (slideDoor()) {
+            active = true;
+            lifeSpan = randomInteger(15, 30);
+            doorTick = 0;
+            coinRelay.emit('open door');
+          } else {
+            doorTick -= randomInteger(10, 25);
+          }
+        }
+      },
+    };
+  })();
+
   const SECONDS_BETWEEN_COINS = 12;
   const VILLAIN_RANGE = { min: 30, max: 40 };
   let paused = false;
@@ -120,6 +151,8 @@ const create = (collection, randomNumberGenerator = { get: () => Math.random() }
           villainTicks = 0;
         }
       }
+
+      doorTimeKeeper.tick();
     }
   };
 
@@ -127,6 +160,7 @@ const create = (collection, randomNumberGenerator = { get: () => Math.random() }
     tryGenerateCoin();
     accummulator = 0;
     coinTicks = 0;
+    villainTicks = 0;
     paused = false;
   };
 

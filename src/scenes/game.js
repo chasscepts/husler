@@ -153,8 +153,6 @@ export default class GameScene extends Phaser.Scene {
     const silvers = this.physics.add.staticGroup();
     const bronzes = this.physics.add.staticGroup();
     const villainAssistances = this.physics.add.staticGroup();
-    // silvers.enableBody = true;
-    // bronzes.enableBody = true;
 
     this.door = createStatic(doors, assets.door.key, 5, 5.5, 1, 2.5);
 
@@ -177,6 +175,18 @@ export default class GameScene extends Phaser.Scene {
       gameObject.on('collected', () => {
         coin.destroy();
       });
+    });
+    coinGenerator.on('open door', () => {
+      if (this.door) {
+        this.door.destroy();
+        this.door = null;
+      }
+    });
+    coinGenerator.on('close door', () => {
+      if (!this.door) {
+        this.door = createStatic(doors, assets.door.key, 5, 5.5, 1, 2.5);
+        this.door.setDepth(-1);
+      }
     });
 
     golds.create(2 * 32, 2 * 32, assets.gold.key);
@@ -252,8 +262,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.physics.add.overlap(
-      player, golds,
-      () => this.collectGold,
+      player, golds, this.collectGold,
       (player, gold) => checkContact(player, gold, 32, 32),
     );
 
@@ -268,7 +277,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     const timeKeeper = timeKeeperFactory.create();
-    timeKeeper.on('game over', this.gameOver);
+    timeKeeper.on('game over', () => this.gameOver(true));
     this.timeKeeper = timeKeeper;
 
     this.add.image(400, 300, assets.grid.key);
@@ -315,9 +324,11 @@ export default class GameScene extends Phaser.Scene {
     this.timeKeeper.tick();
   }
 
-  gameOver = () => {
+  gameOver = (keepAlive = false) => {
     this.physics.pause();
-    this.player.setTint(0xff0000);
+    if (!keepAlive) {
+      this.player.setTint(0xff0000);
+    }
     this.player.anims.play('turn');
     setTimeout(() => {
       this.eventRelay.emit('game over', { score: this.score });
@@ -349,7 +360,7 @@ export default class GameScene extends Phaser.Scene {
 
   collectGold = () => {
     this.updateScore(this.score * 50);
-    this.gameOver();
+    this.gameOver(true);
   };
 
   setupVillain = () => {
