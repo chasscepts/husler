@@ -140,6 +140,7 @@ export default class GameScene extends Phaser.Scene {
   create = () => {
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    this.add.image(400, 300, assets.rock.key).setScale(2);
     const walls = this.physics.add.staticGroup();
     const platforms = this.physics.add.staticGroup();
     setupCornerWalls(walls);
@@ -279,8 +280,6 @@ export default class GameScene extends Phaser.Scene {
     const timeKeeper = timeKeeperFactory.create();
     timeKeeper.on('game over', () => this.gameOver(true));
     this.timeKeeper = timeKeeper;
-
-    this.add.image(400, 300, assets.grid.key);
   }
 
   update = (time, delta) => {

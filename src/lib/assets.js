@@ -20,6 +20,7 @@ import goldFrame from '../assets/images/gold-frame.png';
 import closeBtn from '../assets/images/x-btn.png';
 import scoreBg from '../assets/images/score-bg.png';
 import prussianBg from '../assets/images/prussian-bg.png';
+import rock from '../assets/images/rock.png';
 
 export const htmls = { playerNameForm: { key: 'playerNameForm', file: playerNameForm } };
 
@@ -55,4 +56,7 @@ export default {
   closeBtn: { key: 'x-button', file: closeBtn },
   scoreBg: { key: 'score-bg', file: scoreBg },
   prussianBg: { key: 'prussian-bg', file: prussianBg },
+  olympic: { key: 'olympic', file: olympic },
+  transparent: { key: 'transparent', file: transparent },
+  rock: { key: 'rock', file: rock },
 };

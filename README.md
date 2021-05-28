@@ -2,9 +2,9 @@
 
 # Phaser 3 Game
 
-> An Archaid game developed with phaser 3.
+> An game developed on the Phaser 3 framework. Our hero runs around collecting gems before they and him run out of lives. A villain could be hidden in one of the gems, and there is no way to tell. If he collects the gold coin, he will become very rich.
 
-![screenshot](./screenshot.jpg)
+![screenshot](./screenshot.png)
 
 ## Built With
 
@@ -20,7 +20,7 @@
 
 ## Getting Started
 
-To get a local copy up and running follow these simple example steps on the command line.
+To get a local copy up and running follow these simple steps on the command line.
 
 ```bash
 
@@ -50,6 +50,38 @@ To get a local copy up and running follow these simple example steps on the comm
 
 ```
 
+## How to play
+
+After the game finished loading, you will be taken to the title page. Enter your name in the field provided and click "Play Game" button.
+Use the left, right, up and down arrow keys to control the movement of the hero. Collect the gems to increase your score. Sometimes a villain will hide in one of the gems, if you collect such gem, your character will die. If you collect the gold coin, your score will be multiplied by 50. But it is protected by a door that is periodically openned by an unknown force. The game ends when any of the following occurs.
+
+- The game period of 5 minutes elapses.
+- You collect a villain that is hidden in a gem.
+- You collect the gold coin.
+
+At the end of a game the score is uploaded to an external API. You can retrieve and view the scores in the Leaderboard scene which is accessed through the title page.
+
+## Game Development Design
+
+#### This guide was drafted at the beginning of the project. It served as a guide to the features implemented in the project. A copy of the document can be found [here](./GDD.md). Though not all features has been implemented, the guideline was strctly followed.
+
+# Trapped in a maze
+
+- Our hero is trapped in a maze.
+- He can collect silver and bronze coins that randomly appear (these disappear after some time).
+- The gold coin is locked away in a room that is locked.
+- The door to the gold room sometimes opens. (The game is timed and door should open at random times but opens a constant number of times in a game period)
+- There are many rooms in the maze, some with 1 others with 2 doors. These doors can randomly close at any time.
+- The villain is out to trap our hero in a room.
+- The villan has an assistance who sometimes appears as an innocent coin.
+- If our hero is able to collect the gold before time ellapses, his score is multiplied by 100.
+- The odds of our being trapped if he just waits outside the gold room door should be made high.
+- The game ends if
+  1. Game time elapses.
+  2. Our hero collides with the villain.
+  3. Our hero collects the villain's assistance hidden in a coin.
+- Silver and Bronze coins are worth 30 and 10 points each.
+
 ## Authors
 
 👤 **Obetta Francis**
@@ -74,6 +106,8 @@ Give a ⭐️ if you like this project!
 
 - space by [Scribe](https://opengameart.org/users/r3tr0boidx) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 
+- rock by [Tiny Speck](http://glitchthegame.com/) lincesed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+
 - gem 1 and gem 2 by [codeinfernogames](https://opengameart.org/users/scribe) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
 
 - coin by [WarmGuy](https://opengameart.org/users/warmguy) lincesed under [CC](https://creativecommons.org/licenses/by/3.0/)
@@ -91,9 +125,6 @@ Give a ⭐️ if you like this project!
 - x-btn by [publicdomainvectors.org](https://publicdomainvectors.org/en/free-clipart/Dark-red-button-in-gray-frame/25778.html)
 
 - score-bg by [Sigmund](https://unsplash.com/@sigmund?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-
-- mist []() on [Unsplash]()
-
 
 - Microverse Community
 - Everyone whose code was used in this project
