@@ -9,6 +9,7 @@ import LeaderboardScene from './scenes/leaderboard';
 import assets from './lib/assets';
 import Api from './lib/api';
 import eventEmitter from './lib/event-emitter';
+import LoadingScene from './scenes/loading';
 
 const ID_KEY = 'ogba_mbo_id';
 let api;
@@ -54,11 +55,19 @@ const completed = 'completed';
 const startTitleSceneRelay = eventEmitter();
 const START_TITLE_SCENE_KEY = 'start-title-scene';
 
+const startLoadingScene = () => {
+  const loader = new LoadingScene();
+  game.scene.add(LoadingScene.key, loader);
+  game.scene.start(LoadingScene.key);
+  return loader;
+};
+
 const startLeaderboardScene = () => {
+  startLoadingScene();
   api.records()
     .then((records) => {
-      console.log(records);
       const scene = new LeaderboardScene(records);
+      game.scene.remove(LoadingScene.key);
       game.scene.add(LeaderboardScene.key, scene);
       scene.eventRelay.subscribe('exit', () => {
         game.scene.remove(LeaderboardScene.key);
@@ -68,18 +77,23 @@ const startLeaderboardScene = () => {
     });
 };
 
-function startGameScene() {
+const startGameScene = () => {
   const gameScene = new GameScene();
   game.scene.add(GameScene.key, gameScene);
   gameScene.eventRelay.subscribe('game over', (payload) => {
     game.scene.remove(GameScene.key);
-    api.save({ user: currentPlayer, score: payload.score });
+    startLoadingScene();
+    api.save({ user: currentPlayer, score: payload.score })
+      .then(() => {
+        game.scene.remove(LoadingScene.key);
+        startLeaderboardScene();
+      });
   });
   game.scene.start(GameScene.key);
-}
+};
 
-function startTitleScene() {
-  const title = new TitleScene();
+const startTitleScene = () => {
+  const title = new TitleScene(currentPlayer);
   game.scene.add(TitleScene.key, title);
   title.eventRelay.subscribe('start game', (payload) => {
     currentPlayer = payload.name;
@@ -95,7 +109,7 @@ function startTitleScene() {
     startLeaderboardScene();
   });
   game.scene.start(TitleScene.key);
-}
+};
 startTitleSceneRelay.subscribe(START_TITLE_SCENE_KEY, startTitleScene);
 
 const preloaderCompleted = () => {
@@ -117,7 +131,7 @@ game.scene.start(BootScene.key);
 
 Api.init({
   name: 'Ogba Mbo',
-  id: localStorage.getItem(ID_KEY),
+  gameId: localStorage.getItem(ID_KEY),
   setId: (id) => localStorage.setItem(ID_KEY, id),
   fetch: (url, options) => fetch(url, options),
 }).then((rApi) => {

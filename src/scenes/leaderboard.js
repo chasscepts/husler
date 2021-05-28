@@ -4,15 +4,6 @@ import eventEmitter from '../lib/event-emitter';
 import grid from '../lib/grid';
 import mixin from '../lib/mixin';
 
-// const leaders = [
-//   { user: 'Francis', score: 800 },
-//   { user: 'Charles', score: 700 },
-//   { user: 'Chidimma', score: 600 },
-//   { user: 'Maureen', score: 500 },
-//   { user: 'Netochukwu', score: 400 },
-//   { user: 'Chi Chi', score: 300 },
-// ];
-
 const getBoard = (leaders) => `
   <div style="width: 330px;height:450px;padding:25px;display:flex;flex-flow:column nowrap;color:#fff;font-size:1.2rem;overflow:auto;font-family: 'Pattaya', sans-serif;">
     <div style="display:flex;padding:5px;font-weight:bold;border-bottom:1px dotted #fff;">
@@ -47,7 +38,6 @@ export default class LeaderboardScene extends Phaser.Scene {
       .on('pointerdown', () => {
         this.eventRelay.emit('exit');
       });
-    // this.add.image(400, 300, assets.grid.key);
   }
 }
 

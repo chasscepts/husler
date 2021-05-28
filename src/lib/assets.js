@@ -24,10 +24,6 @@ import prussianBg from '../assets/images/prussian-bg.png';
 export const htmls = { playerNameForm: { key: 'playerNameForm', file: playerNameForm } };
 
 export const sprites = {
-
-};
-
-export const bootSprites = {
   hero: {
     key: 'hero', file: hero, width: 40, height: 40,
   },

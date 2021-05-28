@@ -24,11 +24,15 @@ const Api = {
     const api = () => ({
       records: () => new Promise((resolve, reject) => {
         if (!scoresUrl) {
-          reject(new Error('Api was not correctly initialized'));
+          setTimeout(() => {
+            reject(new Error('Api was not correctly initialized'));
+          }, 0);
           return;
         }
         if (recordSynced) {
-          resolve([...records]);
+          setTimeout(() => {
+            resolve([...records]);
+          }, 0);
           return;
         }
 
@@ -81,30 +85,31 @@ const Api = {
     return new Promise((resolve, reject) => {
       if (service.gameId) {
         scoresUrl = `${baseUrl}games/${service.gameId}/scores/`;
-        resolve(api());
-        return;
-      }
-
-      const options = {
-        mode: 'cors',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: service.name }),
-      };
-      service.fetch(`${baseUrl}games/`, options)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error(response.statusText);
-        })
-        .then((data) => {
-          const [, id] = data.result.match(idMatcher);
-          scoresUrl = `${baseUrl}games/${id}/scores/`;
-          service.setId(id);
+        setTimeout(() => {
           resolve(api());
-        })
-        .catch((err) => reject(err));
+        }, 0);
+      } else {
+        const options = {
+          mode: 'cors',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: service.name }),
+        };
+        service.fetch(`${baseUrl}games/`, options)
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error(response.statusText);
+          })
+          .then((data) => {
+            const [, id] = data.result.match(idMatcher);
+            scoresUrl = `${baseUrl}games/${id}/scores/`;
+            service.setId(id);
+            resolve(api());
+          })
+          .catch((err) => reject(err));
+      }
     });
   },
 };

@@ -1,27 +1,25 @@
 import Phaser from 'phaser';
 import eventEmitter from '../lib/event-emitter';
-import mixin from '../lib/mixin';
 import assets, { htmls } from '../lib/assets';
 import grid from '../lib/grid';
 
 export default class TitleScene extends Phaser.Scene {
-  constructor() {
+  constructor(playerName) {
     super({ key: TitleScene.key });
-    this.eventRelay = mixin({}, eventEmitter());
-  }
-
-  preload = () => {
-    // this.load.html('form', html.playerNameForm);
+    this.playerName = playerName;
+    this.eventRelay = eventEmitter();
   }
 
   create = () => {
     this.add.image(400, 300, assets.titleFrame.key).setScale(2);
     const text = this.add.text(140, 40, 'Please enter your name', { color: '#340079', fontSize: '38px ' });
 
-    // const element = this.add.dom(400, 0).createFromCache('playerNameForm');
     const nameForm = this.add.dom(
       grid.valueOf(12.5), grid.valueOf(10.5),
     ).createFromCache(htmls.playerNameForm.key);
+    if (this.playerName) {
+      nameForm.getChildByName('name').value = this.playerName;
+    }
     this.add.image(grid.valueOf(7.5), grid.valueOf(14), assets.playBtn.key)
       .setInteractive({ useHandCursor: true })
       .on('pointerdown', () => {
@@ -45,11 +43,6 @@ export default class TitleScene extends Phaser.Scene {
       .on('pointerdown', () => {
         this.eventRelay.emit('show leaderboard');
       });
-    // this.add.image(400, 300, assets.grid.key);
-  }
-
-  update = () => {
-
   }
 }
 

@@ -7,55 +7,6 @@ const progressY = 0;
 const progressH = 20;
 const progressFill = 0x008ecc;
 
-const simulateProgress = (progress, eventRelay) => {
-  let elapsed = 0;
-  let count = 0;
-  const duration = 5000;
-  let stopped = false;
-
-  const handler = {
-    update: (delta) => {
-      if (stopped) {
-        return;
-      }
-      elapsed += delta;
-      count += 1;
-      if (count % 5 === 0) {
-        count = 0;
-        if (elapsed >= duration) {
-          elapsed = duration;
-          stopped = true;
-        }
-        progress.clear();
-        progress.fillStyle(progressFill, 1);
-        progress.fillRect(0, progressY, (800 * elapsed) / duration, progressH);
-        if (stopped) {
-          setTimeout(() => {
-            eventRelay.emit('completed');
-          }, 2000);
-        }
-      }
-    },
-  };
-
-  let memo = performance.now();
-
-  const loop = () => {
-    requestAnimationFrame((timestamp) => {
-      handler.update(timestamp - memo);
-      memo = timestamp;
-
-      if (!stopped) {
-        requestAnimationFrame(loop);
-      }
-    });
-  };
-
-  loop();
-
-  return handler;
-};
-
 const setupProgress = (progress, load, eventRelay) => {
   load.on('progress', (value) => {
     progress.clear();
