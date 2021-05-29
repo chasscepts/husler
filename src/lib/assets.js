@@ -21,6 +21,7 @@ import closeBtn from '../assets/images/x-btn.png';
 import scoreBg from '../assets/images/score-bg.png';
 import prussianBg from '../assets/images/prussian-bg.png';
 import rock from '../assets/images/rock.png';
+import view from '../assets/images/view.jpg';
 
 export const htmls = { playerNameForm: { key: 'playerNameForm', file: playerNameForm } };
 
@@ -33,9 +34,10 @@ export const sprites = {
   },
 };
 
-export const bootAssets = {
-  olympic: { key: 'olympic', file: olympic },
-  transparent: { key: 'transparent', file: transparent },
+export const preloads = {
+  images: {
+    pinball: { key: 'pinball', file: pinball },
+  },
 };
 
 export default {
@@ -48,7 +50,6 @@ export default {
   door: { key: 'door', file: door },
   grass: { key: 'grass', file: grass },
   bg: { key: 'bg', file: bg },
-  pinball: { key: 'pinball', file: pinball },
   titleFrame: { key: 'titleFrame', file: titleFrame },
   playBtn: { key: 'playBtn', file: playBtn },
   leaderboardBtn: { key: 'leaderboardBtn', file: leaderboardBtn },
@@ -59,4 +60,5 @@ export default {
   olympic: { key: 'olympic', file: olympic },
   transparent: { key: 'transparent', file: transparent },
   rock: { key: 'rock', file: rock },
+  view: { key: 'view', file: view },
 };

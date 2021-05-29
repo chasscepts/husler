@@ -81,6 +81,11 @@ const startGameScene = () => {
   game.scene.add(GameScene.key, gameScene);
   gameScene.eventRelay.subscribe('game over', (payload) => {
     game.scene.remove(GameScene.key);
+    if (payload.score === 0) {
+      // We don't want to save
+      startLeaderboardScene();
+      return;
+    }
     startLoadingScene();
     api.save({ user: currentPlayer, score: payload.score })
       .then(() => {
@@ -124,9 +129,18 @@ const startPreloaderScene = () => {
   game.scene.start(PreloaderScene.key);
 };
 
-const boot = new BootScene();
-game.scene.add(BootScene.key, boot);
-game.scene.start(BootScene.key);
+const startBootScene = () => {
+  const boot = new BootScene();
+  game.scene.add(BootScene.key, boot);
+  boot.eventRelay.subscribe(completed, () => {
+    game.scene.remove(BootScene.key);
+    startPreloaderScene();
+  });
+  game.scene.start(BootScene.key);
+  return boot;
+};
+
+const boot = startBootScene();
 
 Api.init({
   name: 'Ogba Mbo',
@@ -135,6 +149,5 @@ Api.init({
   fetch: (url, options) => fetch(url, options),
 }).then((rApi) => {
   api = rApi;
-  game.scene.remove(BootScene.key);
-  startPreloaderScene();
+  boot.setApiReady();
 });

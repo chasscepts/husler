@@ -12,7 +12,9 @@ export default class TitleScene extends Phaser.Scene {
 
   create = () => {
     this.add.image(400, 300, assets.titleFrame.key).setScale(2);
-    const text = this.add.text(140, 40, 'Please enter your name', { color: '#340079', fontSize: '38px ' });
+    const text = this.add.text(300, 47, 'Please enter your name', {
+      color: '#fff', fontSize: '14px', backgroundColor: 'red', padding: 7,
+    });
 
     const nameForm = this.add.dom(
       grid.valueOf(12.5), grid.valueOf(10.5),

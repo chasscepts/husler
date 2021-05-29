@@ -140,7 +140,7 @@ export default class GameScene extends Phaser.Scene {
   create = () => {
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.add.image(400, 300, assets.rock.key).setScale(2);
+    this.add.image(400, 300, assets.view.key).setScale(2);
     const walls = this.physics.add.staticGroup();
     const platforms = this.physics.add.staticGroup();
     setupCornerWalls(walls);
