@@ -4,6 +4,7 @@ import eventEmitter from '../lib/event-emitter';
 import coinGeneratorFactory from '../lib/coin-generator';
 import assets, { sprites } from '../lib/assets';
 import timeKeeperFactory from '../lib/time-keeper';
+import grid from '../lib/grid';
 
 const pointsRange = (y, x1, x2) => {
   const rslt = [];
@@ -37,7 +38,6 @@ const freeCells = [
 
 const mid = (a, b) => 32 * (a + (b - a) / 2);
 const s = (a, b) => 2 * (b - a);
-const decide = () => Math.random() <= 0.5;
 
 const ladderLevels = [
   { x: [6, 12, 18], y: [14.9, 17] },
@@ -70,12 +70,15 @@ const createStatic = (staticGroup, name, x1, x2, y1, y2) => {
  * @param {Phaser.Physics.Arcade.StaticGroup} platforms to setup
  */
 const setupCornerWalls = (platforms) => {
-  createStatic(platforms, assets.grass.key, 0, 25, 17, 19);
+  createStatic(platforms, assets.wood.key, 0, 1, 0, 19);
   createStatic(platforms, assets.wood.key, 24, 25, 0, 19);
 };
 
-const setupFloors = (platforms) => {
-  createStatic(platforms, assets.wood.key, 0, 1, 0, 19);
+const setupFloor = (group) => {
+  createStatic(group, assets.grass.key, 0, 25, 17, 19);
+};
+
+const setupPlatforms = (platforms) => {
   createStatic(platforms, assets.wood.key, 0, 25, 0, 1);
 
   [1, 7, 13, 19].forEach((x) => {
@@ -135,12 +138,14 @@ export default class GameScene extends Phaser.Scene {
     this.silverRemaining = true;
     this.bronzeRemainig = true;
     this.isVillainClimbingLadder = false;
+    this.isGameOver = false;
   }
 
   create = () => {
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.add.image(400, 300, assets.view.key).setScale(2);
+    this.add.image(400, 300, assets.rock.key).setScale(2).setDepth(-1000);
+    this.floor = this.physics.add.staticGroup();
     const walls = this.physics.add.staticGroup();
     const platforms = this.physics.add.staticGroup();
     setupCornerWalls(walls);
@@ -153,13 +158,30 @@ export default class GameScene extends Phaser.Scene {
     const golds = this.physics.add.staticGroup();
     const silvers = this.physics.add.staticGroup();
     const bronzes = this.physics.add.staticGroup();
+    this.ladderUps = this.physics.add.staticGroup();
+    this.ladderDowns = this.physics.add.staticGroup();
+    this.ladderTopSeals = this.physics.add.staticGroup();
+    this.ladderBottomSeals = this.physics.add.staticGroup();
     const villainAssistances = this.physics.add.staticGroup();
 
     this.door = createStatic(doors, assets.door.key, 5, 5.5, 1, 2.5);
 
+    setupFloor(this.floor);
     setupLadders(ladders);
     setupLadderSeals(ladderSeals);
-    setupFloors(platforms);
+    setupPlatforms(platforms);
+
+    [
+      [7, 5], [21, 5], [12, 7], [9, 9], [21, 9], [6, 11], [18, 11], [12, 13],
+      [1, 15], [23, 15], [1, 15], [23, 15], [6, 17], [12, 17], [18, 17],
+    ].forEach(([a, b]) => {
+      const x = grid.valueOf(a + 0.5);
+      const yd = grid.valueOf(b + 0.24);
+      const yu = grid.valueOf(b - 2 + 0.24);
+      this.ladderUps.create(x, yd, assets.transparent.key).setScale(2, 1);
+      this.ladderBottomSeals.create(x, yd + 8, assets.transparent.key).setScale(2, 0.5);
+      this.ladderDowns.create(x, yu, assets.transparent.key).setScale(2, 1);
+    });
 
     const coinGenerator = coinGeneratorFactory.create(freeCells);
     coinGenerator.on('coin', (coin) => {
@@ -240,8 +262,9 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    this.villain = this.physics.add.sprite(100, 520, sprites.villain.key);
+    this.villain = this.physics.add.sprite(grid.valueOf(16), grid.valueOf(8), sprites.villain.key);
 
+    this.physics.add.collider(player, this.floor);
     this.physics.add.collider(player, doors);
     this.physics.add.collider(player, walls);
     this.physics.add.collider(player, ladderSeals);
@@ -273,16 +296,30 @@ export default class GameScene extends Phaser.Scene {
 
     this.coinGenerator = coinGenerator;
 
-    this.board = this.add.text(64, 18 * 32, 'Score: 0', {
-      fontSize: '24px', fill: '#0f0',
-    });
-
     const timeKeeper = timeKeeperFactory.create();
     timeKeeper.on('game over', () => this.gameOver(true));
+    timeKeeper.on('tick', () => {
+      this.timeRemaining -= 1;
+      this.timeText.setText(this.timeRemaining);
+    });
     this.timeKeeper = timeKeeper;
+
+    this.board = this.add.text(grid.valueOf(22), grid.valueOf(0.3), 'Score: 0', {
+      fontSize: '14px', fill: '#fff',
+    });
+
+    this.timeRemaining = timeKeeper.duration();
+    this.timeText = this.add.text(grid.valueOf(20), grid.valueOf(0.3), this.timeRemaining, {
+      fontSize: '14px', fill: '#fff',
+    });
+    this.setupVillain();
   }
 
   update = (time, delta) => {
+    if (this.isGameOver) {
+      return;
+    }
+
     this.isPlayerClimbingLadder = false;
     let playerStanding = true;
     if (this.playerCanClimb) {
@@ -320,10 +357,15 @@ export default class GameScene extends Phaser.Scene {
     this.playerCanClimb = false;
 
     this.coinGenerator.tick(delta);
-    this.timeKeeper.tick();
+    this.timeKeeper.tick(delta);
+
+    if (this.villainClimbingUp) {
+      this.villain.body.setVelocityY(-120);
+    }
   }
 
   gameOver = (keepAlive = false) => {
+    this.isGameOver = true;
     this.physics.pause();
     if (!keepAlive) {
       this.player.setTint(0xff0000);
@@ -363,39 +405,20 @@ export default class GameScene extends Phaser.Scene {
   };
 
   setupVillain = () => {
+    const directions = {
+      LEFT: 'left',
+      RIGHT: 'right',
+      UP: 'up',
+      DOWN: 'down',
+    };
+    let direction = directions.RIGHT;
+
+    const velocity = 120;
     const {
-      player, villain, platforms, walls, doors, ladderSeals, ladders,
+      player, villain, platforms, walls, doors, ladderBottomSeals,
     } = this;
-
-    const moveleft = () => {
-      if (!decide()) {
-        return false;
-      }
-      if (villain.body.setVelocityX >= 0) {
-        villain.body.setVelocityY = 0;
-        villain.body.velocityX = 120;
-      }
-      return true;
-    };
-    const moveRight = () => {
-      if (!decide()) {
-        return false;
-      }
-      if (villain.body.setVelocityX < 0) {
-        villain.body.setVelocityY = 0;
-        villain.body.velocityX = 120;
-      }
-      return true;
-    };
-    const moveUp = () => {
-
-    };
-    const moveDown = () => {
-
-    };
-    villain.setBounce(0.2);
-    villain.setDepth(1000);
-    villain.setCollideWorldBounds(true);
+    const decide3 = () => Math.random() > 0.67;
+    const decide2 = () => Math.random() > 0.5;
 
     this.anims.create({
       key: 'villain-left',
@@ -406,48 +429,139 @@ export default class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'villain-right',
-      frames: this.anims.generateFrameNumbers(sprites.villain.key, { start: 12, end: 15 }),
+      frames: this.anims.generateFrameNumbers(sprites.villain.key, { start: 12, end: 17 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'villain-up',
-      frames: this.anims.generateFrameNumbers(sprites.villain.key, { start: 4, end: 7 }),
+      frames: this.anims.generateFrameNumbers(sprites.villain.key, { start: 18, end: 23 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'villain-down',
-      frames: this.anims.generateFrameNumbers(sprites.villain.key, { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers(sprites.villain.key, { start: 0, end: 5 }),
       frameRate: 10,
       repeat: -1,
     });
 
-    this.physics.add.collider(villain, doors);
-    this.physics.add.collider(villain, walls);
-    this.physics.add.collider(villain, ladderSeals);
-    this.physics.add.collider(villain, platforms, null, () => {
-      if (this.isVillainClimbingLadder) {
+    const goRight = () => {
+      villain.setVelocityY(0);
+      villain.setVelocityX(velocity);
+      direction = directions.RIGHT;
+      this.player.anims.play('villain-right', true);
+    };
+
+    const goLeft = () => {
+      villain.setVelocityY(0);
+      villain.setVelocityX(-1 * velocity);
+      direction = directions.LEFT;
+      this.player.anims.play('villain-left', true);
+    };
+
+    const goUp = (ladder) => {
+      villain.setVelocityX(0);
+      villain.body.position.set(ladder.body.x - 8, villain.body.y);
+      villain.body.setVelocityY(-1 * velocity);
+      this.villainClimbingUp = true;
+      direction = directions.UP;
+      this.player.anims.play('villain-up', true);
+    };
+
+    const goDown = (ladder) => {
+      villain.setVelocityX(0);
+      villain.body.position.set(ladder.body.x - 8, villain.body.y);
+      villain.setVelocityY(velocity);
+      direction = directions.DOWN;
+      this.player.anims.play('villain-down', true);
+    };
+
+    villain.setBounce(0.2);
+    villain.setDepth(1000);
+    villain.setCollideWorldBounds(true);
+    goRight();
+
+    this.physics.add.collider(villain, this.floor);
+    this.physics.add.collider(villain, platforms, null,
+      () => !(direction === directions.UP || direction === directions.DOWN));
+    this.physics.add.collider(villain, doors, () => {
+      goRight();
+    });
+    this.physics.add.collider(villain, walls, () => {
+      if (direction === directions.RIGHT) {
+        goLeft();
+      } else {
+        goRight();
+      }
+    });
+    this.physics.add.collider(villain, ladderBottomSeals, (villain, ladder) => {
+      goUp(ladder);
+    }, () => direction === directions.DOWN);
+    this.physics.add.overlap(villain, this.ladderUps, (villain, ladder) => {
+      if (direction === directions.DOWN) {
+        if (decide3()) {
+          goLeft();
+        } else if (decide3()) {
+          goRight();
+        } else {
+          goUp(ladder);
+        }
+        return;
+      }
+      if (decide3()) {
+        goUp(ladder);
+        return;
+      }
+      if (direction === directions.RIGHT) {
+        goLeft();
+      } else if (decide3()) {
+        goRight();
+      } else {
+        goUp(ladder);
+      }
+    }, (villain, ladder) => {
+      if (direction === directions.UP) {
         return false;
       }
-      return true;
-    }, null);
+      const vDist = villain.body.bottom - ladder.body.top;
+      const hDist = villain.body.x + 8 - ladder.body.x;
+      return vDist > 0 && vDist < 2 && hDist >= 0 && hDist < 1;
+    });
 
-    this.physics.add.overlap(villain, ladders, () => {
-      // eslint-disable-next-line no-unused-expressions
-      moveUp() || moveDown() || moveleft() || moveRight();
-    }, (player, ladder) => {
-      if (Math.round(villain.body.left - ladder.body.left) > -13
-        && Math.round(villain.body.right - ladder.body.right) < 11) {
-        return true;
+    this.physics.add.overlap(villain, this.ladderDowns, (villain, ladder) => {
+      if (this.villainClimbingUp) {
+        this.villainClimbingUp = false;
+        if (decide2()) {
+          goRight();
+        } else if (decide2()) {
+          goLeft();
+        } else {
+          goDown(ladder);
+        }
+        return;
       }
-      return false;
+      if (decide3()) {
+        goDown(ladder);
+        return;
+      }
+      if (direction === directions.LEFT && decide3()) {
+        goRight();
+      } else if (decide3()) {
+        goLeft();
+      } else {
+        goDown(ladder);
+      }
+    }, (villain, ladder) => {
+      const vDist = villain.body.bottom - ladder.body.top;
+      const hDist = villain.body.x + 8 - ladder.body.x;
+      return vDist > 0 && vDist < 2 && hDist >= 0 && hDist < 1;
     });
 
     this.physics.add.overlap(player, villain, () => {
-
+      this.gameOver();
     }, null, this);
   }
 }

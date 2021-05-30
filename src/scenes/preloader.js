@@ -38,7 +38,7 @@ export default class PreloaderScene extends Phaser.Scene {
     Object.keys(sprites).forEach((key) => {
       const sprite = sprites[key];
       loader.spritesheet(
-        sprite.key, sprite.file, { frameWidth: sprite.width, frameHeight: sprite.width },
+        sprite.key, sprite.file, { frameWidth: sprite.width, frameHeight: sprite.height },
       );
     });
 

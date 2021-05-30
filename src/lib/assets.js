@@ -22,6 +22,8 @@ import scoreBg from '../assets/images/score-bg.png';
 import prussianBg from '../assets/images/prussian-bg.png';
 import rock from '../assets/images/rock.png';
 import view from '../assets/images/view.jpg';
+import bbb from '../assets/images/bbb.jpg';
+import red from '../assets/images/red.jpg';
 
 export const htmls = { playerNameForm: { key: 'playerNameForm', file: playerNameForm } };
 
@@ -30,7 +32,7 @@ export const sprites = {
     key: 'hero', file: hero, width: 40, height: 40,
   },
   villain: {
-    key: 'villain', file: villain, width: 42, height: 38,
+    key: 'villain', file: villain, width: 35.83, height: 37.5,
   },
 };
 
@@ -61,4 +63,6 @@ export default {
   transparent: { key: 'transparent', file: transparent },
   rock: { key: 'rock', file: rock },
   view: { key: 'view', file: view },
+  bbb: { key: 'bbb', file: bbb },
+  red: { key: 'red', file: red },
 };

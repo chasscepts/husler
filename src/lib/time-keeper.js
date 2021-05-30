@@ -20,7 +20,7 @@ const create = () => {
       if (deltaTime > 1000) {
         deltaTime %= 1000;
         elapsedSeconds += 1;
-        relay.emit('seconds tick');
+        relay.emit('tick');
 
         if (elapsedSeconds >= GAME_DURATION) {
           gameOver = true;
@@ -35,6 +35,7 @@ const create = () => {
       elapsedSeconds = 0;
       gameOver = false;
     },
+    duration: () => GAME_DURATION,
     on: (event, callback) => relay.subscribe(event, callback),
   };
 };
