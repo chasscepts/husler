@@ -63,24 +63,28 @@ At the end of a game the score is uploaded to an external API. You can retrieve 
 
 ## Game Development Design
 
-#### This guide was drafted at the beginning of the project. It served as a guide to the features implemented in the project. A copy of the document can be found [here](./GDD.md). Though not all features has been implemented, the guideline was strctly followed.
+#### The guide below was drafted at the beginning of the project. It served as a guide to the features implemented in the project. A copy of the document can be found [here](./GDD.md). Though not all features has been implemented, the guideline was strctly followed.
 
 # Trapped in a maze
 
 - Our hero is trapped in a maze.
 - He can collect silver and bronze coins that randomly appear (these disappear after some time).
-- The gold coin is locked away in a room that is locked.
+- The gold coin is locked away in a room.
 - The door to the gold room sometimes opens. (The game is timed and door should open at random times but opens a constant number of times in a game period)
 - There are many rooms in the maze, some with 1 others with 2 doors. These doors can randomly close at any time.
 - The villain is out to trap our hero in a room.
 - The villan has an assistance who sometimes appears as an innocent coin.
 - If our hero is able to collect the gold before time ellapses, his score is multiplied by 100.
-- The odds of our being trapped if he just waits outside the gold room door should be made high.
+- The odds of our hero being trapped if he just waits outside the gold room door should be made high.
 - The game ends if
   1. Game time elapses.
   2. Our hero collides with the villain.
   3. Our hero collects the villain's assistance hidden in a coin.
 - Silver and Bronze coins are worth 30 and 10 points each.
+
+### Accomplishments so far
+
+I have been able to implement most of the features I initially set out in the GDD. The major feature that is remaining is making the villain intelligent. This point is vaguely referenced in point 9 of the GDD. Currently, the villain has no knowledge of where the hero nor the gold coin is on the board. If I can make the villain intelligent, I will be able to add levels to the game by increasing how difficult the villain makes it for the hero to survive at higher levels.
 
 ## Authors
 
