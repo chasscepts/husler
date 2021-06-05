@@ -2,7 +2,7 @@
 
 # Phaser 3 Game
 
-> A game developed on the Phaser 3 framework. Our hero runs around, collecting gems before they and he run out of lives. A villain could be hidden in one of the gems, and there is no way to tell. If he collects the gold coin, he will become very rich. If he is caught by the villain or he collects the villains assistance - hidden in a coin - he dies.
+> A game developed on the Phaser 3 framework. Our hero runs around, collecting gems before they and he run out of lives. A villain could be hidden in one of the gems, and there is no way to tell. If he collects the gold coin, he will become very rich. If he is caught by the villain or he collects the villain's assistance - hidden in a coin - he dies.
 
 ![screenshot](./screenshot.png)
 
