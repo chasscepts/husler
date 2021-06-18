@@ -85,6 +85,7 @@ At the end of a game the score is uploaded to an external API. You can retrieve 
 ### Accomplishments so far
 
 I have been able to implement most of the features I initially set out in the GDD. The major feature that is remaining is making the villain intelligent. This point is vaguely referenced in point 9 of the GDD. Currently, the villain has no knowledge of where the hero nor the gold coin is on the board. If I can make the villain intelligent, I will be able to add levels to the game by increasing how difficult the villain makes it for the hero to survive at higher levels.
+But I ran out of time and was not able to accomplish all that.
 
 ## Authors
 
@@ -129,6 +130,8 @@ Give a ⭐️ if you like this project!
 - x-btn by [publicdomainvectors.org](https://publicdomainvectors.org/en/free-clipart/Dark-red-button-in-gray-frame/25778.html)
 
 - score-bg by [Sigmund](https://unsplash.com/@sigmund?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+
+- body-bg by [Claudio Testa](https://unsplash.com/@claudiotesta?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/forest-background?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
 - Microverse Community
 - Everyone whose code was used in this project
