@@ -300,7 +300,7 @@ export default class GameScene extends Phaser.Scene {
     timeKeeper.on('game over', () => this.gameOver(true));
     timeKeeper.on('tick', () => {
       this.timeRemaining -= 1;
-      this.timeText.setText(this.timeRemaining);
+      this.updateRemainingTime();
     });
     this.timeKeeper = timeKeeper;
 
@@ -563,6 +563,12 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(player, villain, () => {
       this.gameOver();
     }, null, this);
+  }
+
+  updateRemainingTime = () => {
+    const min = Math.floor(this.timeRemaining / 60);
+    const sec = this.timeRemaining % 60;
+    this.timeText.setText(`${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`);
   }
 }
 
