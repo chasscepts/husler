@@ -16,7 +16,7 @@
 
 ## Live Demo
 
-[Game](https://friendly-varahamihira-bd76c2.netlify.app/)
+[Game](https://husler.netlify.app/)
 
 ## Getting Started
 
