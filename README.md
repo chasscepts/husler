@@ -1,8 +1,8 @@
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 
-# Phaser 3 Game
+# Husler
 
-> A game developed on the Phaser 3 framework. Our hero runs around, collecting gems before they and he run out of lives. A villain could be hidden in one of the gems, and there is no way to tell. If he collects the gold coin, he will become very rich. If he is caught by the villain or he collects the villain's assistance - hidden in a coin - he dies.
+> Husler is a game developed on the Phaser 3 framework. Our hero runs around, collecting Gems before they and he run out of lives. A villain could be hiding in any of the Gems, and there is no way to tell. If he collects the gold coin, he will become rich. But if the villain catches him, he dies.
 
 ![screenshot](./screenshot.png)
 
@@ -20,7 +20,7 @@
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps on the command line.
+To get a local copy of the project up and running, follow these simple steps on the command line.
 
 ```bash
 
@@ -52,30 +52,30 @@ To get a local copy up and running follow these simple steps on the command line
 
 ## How to play
 
-After the game finished loading, you will be taken to the title page. Enter your name in the field provided and click "Play Game" button.
-Use the left, right, up and down arrow keys to control the movement of the hero. Collect the gems to increase your score. Sometimes a villain will hide in one of the gems, if you collect such gem, your character will die. If you collect the gold coin, your score will be multiplied by 50. But it is protected by a door that is periodically openned by an unknown force. The game ends when any of the following occurs.
+After the game has finished loading, you are taking to the title page. Enter your name in the field provided and click the "Play Game" button.
+Use the left, right, up, and down arrow keys to control the hero's movement. Collect the gems to increase your score. Sometimes a villain will hide in one of the gems, and if you collect such Gem, your character will die. Your score will be multiplied by 50 if you succeed in collecting the gold coin. But it is protected by a door that an unknown force periodically opens. The game ends when any of the following occurs.
 
 - The game period of 5 minutes elapses.
-- You collect a villain that is hidden in a gem.
+- You collect a villain that is hiding in a gem.
 - You collect the gold coin.
 
-At the end of a game the score is uploaded to an external API. You can retrieve and view the scores in the Leaderboard scene which is accessed through the title page.
+At the end of a game, the application uploads the score to an external API. You can retrieve and view the scores in the Leaderboard scene that you access through the title page.
 
 ## Game Development Design
 
-#### The guide below was drafted at the beginning of the project. It served as a guide to the features implemented in the project. A copy of the document can be found [here](./GDD.md). Though not all features has been implemented, the guideline was strctly followed.
+#### I drafted the following guide at the beginning of the project. It served as a guide to the features implemented in the project. You can find a copy of the document [here](./GDD.md). Though I have not implemented all the features outlined here, I strictly followed the guideline while developing the game.
 
 # Trapped in a maze
 
 - Our hero is trapped in a maze.
 - He can collect silver and bronze coins that randomly appear (these disappear after some time).
 - The gold coin is locked away in a room.
-- The door to the gold room sometimes opens. (The game is timed and door should open at random times but opens a constant number of times in a game period)
-- There are many rooms in the maze, some with 1 others with 2 doors. These doors can randomly close at any time.
+- The door to the gold room sometimes opens. The game has a duration, and though the door opens at random times, it should open the same number of times in a game.
+- There are many rooms in the maze, some with one, others with two doors. These doors can randomly close at any time.
 - The villain is out to trap our hero in a room.
-- The villan has an assistance who sometimes appears as an innocent coin.
-- If our hero is able to collect the gold before time ellapses, his score is multiplied by 100.
-- The odds of our hero being trapped if he just waits outside the gold room door should be made high.
+- The villain has assistance who sometimes appears as an innocent coin.
+- If our hero can collect the gold before time elapses, his score is multiplied by 100.
+- The odds of our hero becoming trapped if he waits outside the gold room door should be made high.
 - The game ends if
   1. Game time elapses.
   2. Our hero collides with the villain.
@@ -84,7 +84,7 @@ At the end of a game the score is uploaded to an external API. You can retrieve 
 
 ### Accomplishments so far
 
-I have been able to implement most of the features I initially set out in the GDD. The major feature that is remaining is making the villain intelligent. This point is vaguely referenced in point 9 of the GDD. Currently, the villain has no knowledge of where the hero nor the gold coin is on the board. If I can make the villain intelligent, I will be able to add levels to the game by increasing how difficult the villain makes it for the hero to survive at higher levels.
+I have been able to implement most of the features I initially set out in the GDD. The only major one that is remaining is making the villain intelligent. The GDD vaguely referenced this in point 9. Currently, the villain does not know where the hero nor the gold coin is on the board. If I can make the villain intelligent, I can add levels to the game by increasing how difficult it is for the hero to survive at higher levels.
 But I ran out of time and was not able to accomplish all that.
 
 ## Authors
