@@ -26,11 +26,11 @@ To get a local copy of the project up and running, follow these simple steps on 
 
   # Clone the project from it's github repo.
 
-  $ git clone https://github.com/chasscepts/phaser-game
+  $ git clone https://github.com/chasscepts/husler
 
   # Change directory to the root of project
 
-  $ cd phaser-game
+  $ cd husler
 
   # Install all dependencies
 
@@ -97,7 +97,7 @@ But I ran out of time and was not able to accomplish all that.
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/chasscepts/phaser-game/issues).
+Feel free to check the [issues page](https://github.com/chasscepts/husler/issues).
 
 ## Show your support
 

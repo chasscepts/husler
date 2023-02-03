@@ -573,6 +573,8 @@ export default class GameScene extends Phaser.Scene {
     const sec = this.timeRemaining % 60;
     try {
       this.timeText.setText(`${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`);
-    } catch {}
+    } catch {
+      // We only want to prevent the App from crashing.
+    }
   }
 }
