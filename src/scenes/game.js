@@ -128,6 +128,8 @@ const setupLadderSeals = (seals) => {
 const checkContact = (a, b, x, y) => a.body.left - b.body.left < x && b.body.top - b.body.top < y;
 
 export default class GameScene extends Phaser.Scene {
+  static key = 'game';
+
   constructor() {
     super({ key: GameScene.key });
     this.eventRelay = eventEmitter();
@@ -312,6 +314,7 @@ export default class GameScene extends Phaser.Scene {
     this.timeText = this.add.text(grid.valueOf(20), grid.valueOf(0.3), this.timeRemaining, {
       fontSize: '14px', fill: '#fff',
     });
+
     this.setupVillain();
   }
 
@@ -568,8 +571,10 @@ export default class GameScene extends Phaser.Scene {
   updateRemainingTime = () => {
     const min = Math.floor(this.timeRemaining / 60);
     const sec = this.timeRemaining % 60;
-    this.timeText.setText(`${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`);
+    try {
+      this.timeText.setText(`${min < 10 ? `0${min}` : min}:${sec < 10 ? `0${sec}` : sec}`);
+    } catch {
+      // We only want to prevent the App from crashing.
+    }
   }
 }
-
-GameScene.key = 'game';

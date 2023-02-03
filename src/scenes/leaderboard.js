@@ -5,18 +5,18 @@ import grid from '../lib/grid';
 import mixin from '../lib/mixin';
 
 const getBoard = (leaders) => `
-  <div style="width: 330px;height:450px;padding:25px;display:flex;flex-flow:column nowrap;color:#fff;font-size:1.2rem;overflow:auto;font-family: 'Pattaya', sans-serif;">
+  <div style="width: 330px;height:450px;padding:25px;display:flex;flex-flow:column nowrap;color:#fff;font-size:1.2rem;overflow:hidden;font-family: 'Pattaya', sans-serif;">
     <div style="display:flex;padding:5px;font-weight:bold;border-bottom:1px dotted #fff;">
       <span style="flex:1;">Player</span>
-      <span style="flex:0 0 40px;">Score</span>
+      <span style="flex:0 0 80px;">Score</span>
     </div>
-    <div>
-  ${leaders.map((leader) => `
-    <div style="display:flex;padding:5px;">
-      <span style="flex:1;">${leader.user}</span>
-      <span style="flex:0 0 40px;">${leader.score}</span>
-    </div>
-  `).join('')}
+    <div style="flex:1;overflow:auto;padding:10px 0;">
+      ${leaders.map((leader) => `
+        <div style="display:flex;padding:5px;">
+          <span style="flex:1;">${leader.user}</span>
+          <span style="flex:0 0 60px;">${leader.score}</span>
+        </div>
+      `).join('')}
     </div>
   </div>
 `;
