@@ -5,7 +5,7 @@
  * - Retrieving Scores
  */
 
-const Api = {
+export const CloudApi = {
   init: (service) => {
     const baseUrl = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/';
     const idMatcher = 'Game with ID: (.*) added.';
@@ -111,6 +111,48 @@ const Api = {
           .catch((err) => reject(err));
       }
     });
+  },
+};
+
+const Api = {
+  init: async ({ name, gameId, setGameId }) => {
+    const id = gameId || `${name.replace(/\s+/g, '-')}-${Date.now()}`;
+    const records = (() => {
+      if (gameId) {
+        const raw = localStorage.getItem(id);
+
+        if (raw) {
+          try {
+            return JSON.parse(raw);
+          } catch {
+            // ignore
+          }
+        }
+      } else {
+        setGameId(id);
+      }
+
+      const s = [];
+
+      localStorage.setItem(id, JSON.stringify(s));
+
+      return s;
+    })();
+
+    records.sort((a, b) => b.score - a.score);
+
+    return {
+      records: async () => [...records],
+      save: async (record) => {
+        if (!record || !record.user || !record.score) {
+          throw new Error('Invalid record');
+        }
+
+        records.push(record);
+        records.sort((a, b) => b.score - a.score);
+        localStorage.setItem(id, JSON.stringify(records));
+      },
+    };
   },
 };
 

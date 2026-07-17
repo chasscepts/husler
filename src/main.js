@@ -145,8 +145,7 @@ const boot = startBootScene();
 Api.init({
   name: 'Ogba Mbo',
   gameId: localStorage.getItem(ID_KEY),
-  setId: (id) => localStorage.setItem(ID_KEY, id),
-  fetch: (url, options) => fetch(url, options),
+  setGameId: (id) => localStorage.setItem(ID_KEY, id),
 }).then((rApi) => {
   api = rApi;
   boot.setApiReady();

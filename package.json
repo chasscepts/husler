@@ -27,17 +27,15 @@
     "stylelint-config-standard": "^21.0.0",
     "stylelint-csstree-validator": "^1.9.0",
     "stylelint-scss": "^3.19.0",
-    "webpack": "^5.37.1",
-    "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2"
+    "vite": "^8.0.12"
   },
   "scripts": {
     "eslint": "npx eslint .",
     "stylelint": "npx stylelint \"**/*.scss\"",
     "test": "jest",
-    "build": "webpack --progress --mode=production",
-    "watch": "webpack --progress --watch",
-    "serve": "webpack serve --mode development --env development --open",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "publish": "git subtree push --prefix dist origin gh-pages"
   },
   "repository": {
