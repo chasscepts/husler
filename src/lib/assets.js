@@ -13,7 +13,7 @@ import transparent from '../assets/images/transparent.png';
 import olympic from '../assets/images/bg-olympic.png';
 import pinball from '../assets/images/pinball.png';
 import titleFrame from '../assets/images/title-frame.png';
-import playerNameForm from '../assets/texts/name-form.html';
+import playerNameForm from '../assets/texts/name-form.html?url';
 import playBtn from '../assets/images/gold-btn-play.png';
 import leaderboardBtn from '../assets/images/gold-btn-leaderboard.png';
 import goldFrame from '../assets/images/gold-frame.png';
